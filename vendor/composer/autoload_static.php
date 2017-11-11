@@ -337,12 +337,17 @@ class ComposerStaticInit7edb37bdd9d81f5eedc10b43f420e335
     );
 
     public static $classMap = array (
+        'CreateCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172647_create_comments_table.php',
+        'CreateLikesTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172716_create_likes_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
-        'CreatePermissionsTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_27_074005_create_permissions_table.php',
-        'CreateRolesPermissionsTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_27_074032_create_roles_permissions_table.php',
-        'CreateRolesTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_27_073946_create_roles_table.php',
-        'CreateUsersRolesTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_27_074108_create_users_roles_table.php',
+        'CreatePostTagsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172730_create_post_tags_table.php',
+        'CreatePostsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172509_create_posts_table.php',
+        'CreateSubtopicPostsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172806_create_subtopic_posts_table.php',
+        'CreateSubtopicsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172848_create_subtopics_table.php',
+        'CreateTagsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172743_create_tags_table.php',
+        'CreateTopicsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172836_create_topics_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
+        'CreateVisitorsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_11_172821_create_visitors_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'ExampleTest' => __DIR__ . '/../..' . '/tests/ExampleTest.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
@@ -954,7 +959,6 @@ class ComposerStaticInit7edb37bdd9d81f5eedc10b43f420e335
         'TheSeer\\Tokenizer\\TokenCollectionException' => __DIR__ . '/..' . '/theseer/tokenizer/src/TokenCollectionException.php',
         'TheSeer\\Tokenizer\\Tokenizer' => __DIR__ . '/..' . '/theseer/tokenizer/src/Tokenizer.php',
         'TheSeer\\Tokenizer\\XMLSerializer' => __DIR__ . '/..' . '/theseer/tokenizer/src/XMLSerializer.php',
-        'UsersTableSeeder' => __DIR__ . '/../..' . '/database/seeds/UsersTableSeeder.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

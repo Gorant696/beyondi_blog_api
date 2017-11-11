@@ -6,12 +6,17 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CreateCommentsTable' => $baseDir . '/database/migrations/2017_11_11_172647_create_comments_table.php',
+    'CreateLikesTable' => $baseDir . '/database/migrations/2017_11_11_172716_create_likes_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
-    'CreatePermissionsTable' => $baseDir . '/database/migrations/2017_10_27_074005_create_permissions_table.php',
-    'CreateRolesPermissionsTable' => $baseDir . '/database/migrations/2017_10_27_074032_create_roles_permissions_table.php',
-    'CreateRolesTable' => $baseDir . '/database/migrations/2017_10_27_073946_create_roles_table.php',
-    'CreateUsersRolesTable' => $baseDir . '/database/migrations/2017_10_27_074108_create_users_roles_table.php',
+    'CreatePostTagsTable' => $baseDir . '/database/migrations/2017_11_11_172730_create_post_tags_table.php',
+    'CreatePostsTable' => $baseDir . '/database/migrations/2017_11_11_172509_create_posts_table.php',
+    'CreateSubtopicPostsTable' => $baseDir . '/database/migrations/2017_11_11_172806_create_subtopic_posts_table.php',
+    'CreateSubtopicsTable' => $baseDir . '/database/migrations/2017_11_11_172848_create_subtopics_table.php',
+    'CreateTagsTable' => $baseDir . '/database/migrations/2017_11_11_172743_create_tags_table.php',
+    'CreateTopicsTable' => $baseDir . '/database/migrations/2017_11_11_172836_create_topics_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
+    'CreateVisitorsTable' => $baseDir . '/database/migrations/2017_11_11_172821_create_visitors_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'ExampleTest' => $baseDir . '/tests/ExampleTest.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
@@ -623,5 +628,4 @@ return array(
     'TheSeer\\Tokenizer\\TokenCollectionException' => $vendorDir . '/theseer/tokenizer/src/TokenCollectionException.php',
     'TheSeer\\Tokenizer\\Tokenizer' => $vendorDir . '/theseer/tokenizer/src/Tokenizer.php',
     'TheSeer\\Tokenizer\\XMLSerializer' => $vendorDir . '/theseer/tokenizer/src/XMLSerializer.php',
-    'UsersTableSeeder' => $baseDir . '/database/seeds/UsersTableSeeder.php',
 );

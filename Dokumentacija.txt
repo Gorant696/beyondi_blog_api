@@ -1,0 +1,3 @@
+https://github.com/tymondesigns/jwt-auth/wiki,
+
+https://github.com/tymondesigns/jwt-auth/issues/1102

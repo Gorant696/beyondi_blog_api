@@ -15,6 +15,10 @@ class CreateSubtopicPostsTable extends Migration
     {
         Schema::create('subtopic_posts', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('subtopic_id')->unsigned();
+            $table->foreign('subtopic_id')->references('id')->on('subtopics')->onDelete('restrict')->onUpdate('cascade');
+            $table->integer('post_id')->unsigned();
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

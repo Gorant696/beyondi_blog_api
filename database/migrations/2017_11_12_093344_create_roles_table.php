@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubtopicsTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateSubtopicsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subtopics', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('topic_id')->unsigned();
-            $table->foreign('topic_id')->references('id')->on('topics')->onDelete('restrict')->onUpdate('cascade');
-            $table->string('title')->unique();
+            $table->string('name');
+            $table->string('role_key');
         });
     }
 
@@ -28,6 +27,6 @@ class CreateSubtopicsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subtopics');
+        Schema::dropIfExists('roles');
     }
 }

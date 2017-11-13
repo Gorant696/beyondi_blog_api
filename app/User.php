@@ -36,5 +36,35 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
     
+    public function comments(){
+        
+        return $this->hasmany(Comments::class);
+        
+    }
+    
+    public function posts(){
+        
+        return $this->hasmany(Posts::class);
+        
+    }
+    
+    public function roles(){
+        
+        return $this->belongstomany(Roles::class, 'role_users', 'user_id', 'role_id');
+        
+    }
+    
+    public function likes(){
+        
+        return $this->belongstomany(Comments::class, 'likes', 'user_id', 'comment_id');
+        
+    }
+    
+    public function visitors(){
+        
+        return $this->belongstomany(Posts::class, 'visitors', 'user_id', 'post_id');
+        
+    }
+    
     
 }

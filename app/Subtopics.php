@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subtopics extends Model {
     
+    public $timestamps = false;
+    
     public function topics(){
         
         return $this->belongsto(Topics::class);

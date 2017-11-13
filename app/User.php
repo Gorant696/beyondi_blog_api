@@ -17,6 +17,7 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
+    const ROLE_ADMIN = 'admin';
 
     /**
      * The attributes that are mass assignable.
@@ -50,7 +51,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     
     public function roles(){
         
-        return $this->belongstomany(Roles::class, 'role_users', 'user_id', 'role_id');
+        return $this->belongstomany(Roles::class, 'user_roles', 'user_id', 'role_id');
         
     }
     

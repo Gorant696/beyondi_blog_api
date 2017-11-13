@@ -17,7 +17,8 @@ class CreateSubtopicsTable extends Migration
             $table->increments('id');
             $table->integer('topic_id')->unsigned();
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('restrict')->onUpdate('cascade');
-            $table->string('title')->unique();
+            $table->string('name');
+            $table->string('subtopic_key')->unique();
         });
     }
 

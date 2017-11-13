@@ -1,38 +1,50 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
 
+
+//Rute za koje je potrebno biti prijavljen
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
-    $router->get('/', [
+    
+     $router->get('/users', [
         'roles' => ['admin', 'user'],
-        'uses' => ''//metoda kontrolera
+        'uses' => 'UserController@all'//metoda kontrolera
+    ]);
+     
+        $router->get('/users/{id}', [
+        'roles' => ['admin', 'user'],
+        'uses' => 'UserController@finduser'//metoda kontrolera
+    ]);
+        
+             $router->get('/logout', [
+        'roles' => ['admin', 'user'],
+        'uses' => 'UserController@logoutuser'//metoda kontrolera
     ]);
     
 });
 
+//Rute za koje je bitno biti prijavljen i određene role
 $router->group(['middleware' => ['auth', 'authrole']], function () use ($router) {
     
-    $router->get('/', [
-        'roles' => ['admin', 'user'],
-        'uses' => ''//metoda kontrolera
+  $router->put('/users/{id}', [
+        'roles' => ['admin'],
+        'uses' => 'UserController@update'//metoda kontrolera
+    ]);
+  
+    $router->delete('/users/{id}', [
+        'roles' => ['admin'],
+        'uses' => 'UserController@delete'//metoda kontrolera
     ]);
     
 });
 
 
+//Rute kojima može bilo tko pristupiti
 $router->get('/', 'AuthController@index');
 
 $router->post('/login', 'AuthController@login');
+
+$router->post('/users', 'UserController@create');
 
 
 

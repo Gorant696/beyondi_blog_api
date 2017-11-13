@@ -30,9 +30,7 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
 });
 
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->get('/', 'AuthController@index');
 
 $router->post('/login', 'AuthController@login');
 

@@ -17,6 +17,12 @@ class AuthController extends Controller {
     public function __construct() {
         
     }
+    
+    public function index(){
+        
+        return response()->json(['message'=>'Beyondi Blog API']);
+        
+    }
 
     public function login(Request $request) {
 

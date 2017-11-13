@@ -11,6 +11,19 @@
 |
 */
 
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    
+    $router->get('/', [
+        'roles' => ['admin', 'user'],
+        'uses' => ''//metoda kontrolera
+    ]);
+    
+});
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('/test', 'PageController@test');
+
+

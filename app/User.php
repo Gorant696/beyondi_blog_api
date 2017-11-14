@@ -63,9 +63,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     
     public function visitors(){
         
-        return $this->belongstomany(Posts::class, 'visitors', 'user_id', 'post_id');
+        return $this->hasmany(Visitors::class);
         
     }
+    
+  
+    
+    
     
     
 }

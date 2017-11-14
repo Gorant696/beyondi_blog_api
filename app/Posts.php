@@ -30,10 +30,38 @@ class Posts extends Model {
         
     }
     
-    public function visitors(){
+    public function topics(){
         
-        return $this->belongstomany(User::class, 'visitors', 'post_id', 'user_id');
+        return $this->belongsto(Topics::class);
         
     }
+    
+
+    
+    public function status(){
+        
+        return $this->hasone(Status::class);
+        
+    }
+    
+    public function relatedposts(){
+        
+        return $this->belongstomany(Posts::class, 'relatedposts', 'post_id', 'related_post_id');
+        
+    }
+    
+    public function similarposts(){
+        
+        return $this->belongstomany(Posts::class, 'similarposts', 'post_id', 'similar_post_id');
+        
+    }
+    
+    public function visitors(){
+        
+        return $this->hasmany(Visitors::class);
+        
+    }
+    
+    
     
 }

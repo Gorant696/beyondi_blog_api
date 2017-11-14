@@ -14,4 +14,10 @@ class Topics extends Model {
         
     }
     
+    public function posts(){
+        
+        return $this->hasmany(Posts::class);
+        
+    }
+    
 }

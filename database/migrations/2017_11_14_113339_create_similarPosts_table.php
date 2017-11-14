@@ -15,8 +15,8 @@ class CreateSimilarPostsTable extends Migration
     {
         Schema::create('similarPosts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('original_post_id')->unsigned();
-            $table->foreign('original_post_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('post_id')->unsigned();
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('similar_post_id')->unsigned();
             $table->foreign('similar_post_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

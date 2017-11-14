@@ -5,7 +5,6 @@
 //Rute za koje je potrebno biti prijavljen
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
-    
      $router->get('/users', [
         'roles' => ['admin', 'user'],
         'uses' => 'UserController@all'//metoda kontrolera
@@ -45,6 +44,8 @@ $router->get('/', 'AuthController@index');
 $router->post('/login', 'AuthController@login');
 
 $router->post('/users', 'UserController@create');
+
+$router->get('/posts', 'PostsController@all');
 
 
 

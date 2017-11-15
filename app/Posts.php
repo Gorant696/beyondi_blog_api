@@ -40,7 +40,7 @@ class Posts extends Model {
     
     public function status(){
         
-        return $this->hasone(Status::class);
+        return $this->hasmany(Status::class);
         
     }
     

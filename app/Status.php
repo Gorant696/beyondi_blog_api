@@ -4,9 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+
 class Status extends Model {
     
- public function users(){
+    public $timestamps = false;
+    
+ public function posts(){
      
    return  $this->belongsto(Posts::class);
      

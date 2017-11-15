@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
             $table->string('slug');
             $table->integer('status_id')->unsigned();
-            $table->foreign('status_id')->references('id')->on('status')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }

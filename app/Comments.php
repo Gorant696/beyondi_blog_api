@@ -18,10 +18,6 @@ class Comments extends Model {
         
     }
     
-    public function likes(){
-        
-        return $this->belongstomany(User::class, 'likes', 'comment_id', 'user_id');
-        
-    }
+
     
 }

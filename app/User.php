@@ -55,11 +55,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         
     }
     
-    public function likes(){
-        
-        return $this->belongstomany(Comments::class, 'likes', 'user_id', 'comment_id');
-        
-    }
     
     public function visitors(){
         

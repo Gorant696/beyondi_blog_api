@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Visitors extends Model {
+class Visitor extends Model {
     
     public function posts(){
         
-        return $this->belongsto(Posts::class);
+        return $this->belongsto(Post::class);
         
     }
     

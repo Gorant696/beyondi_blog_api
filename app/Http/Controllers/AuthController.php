@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use \App\User;
-use \App\Roles;
+use \App\Role;
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

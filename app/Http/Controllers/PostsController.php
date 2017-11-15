@@ -2,9 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use \App\User;
-use \App\Roles;
-use \App\Posts;
+use App\User;
+use App\Role;
+use App\Post;
+use App\Relatedpost;
+use App\Similarpost;
+use App\Visitor;
+use App\Comment;
+use App\Subtopic;
+use App\Topic;
+use App\Like;
+use App\Tag;
+use App\Status;
+
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,13 +33,20 @@ class PostsController extends Controller {
     
     public function all(){
         
-        $posts=Posts::all();
+        $posts=Post::all();
         
         return response()->json(['Posts'=>$posts]);
         
         
     }
-
-
+    
+    public function similar(){
+        
+   $data= User::all();
+   
+   return response()->json(['Posts'=>$data]);
+        
+    }
+    
 
 }

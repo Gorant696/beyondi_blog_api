@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Likes extends Model {
+class Like extends Model {
     
 
     public function comments(){
         
-        return $this->belongsto(Comments::class);
+        return $this->belongsto(Comment::class);
         
     }
     

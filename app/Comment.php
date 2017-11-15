@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Comments extends Model {
+class Comment extends Model {
     
      public function posts(){
         
-        return $this->belongsto(Posts::class);
+        return $this->belongsto(Post::class);
         
     }
     
@@ -20,7 +20,7 @@ class Comments extends Model {
     
     public function likes(){
         
-        return $this->hasmany(Likes::class);
+        return $this->hasmany(Like::class);
         
     }
     

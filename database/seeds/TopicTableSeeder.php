@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Topics;
-use App\Subtopics;
+use App\Topic;
+use App\Subtopic;
 
 class TopicTableSeeder extends Seeder {
 
@@ -11,7 +11,7 @@ class TopicTableSeeder extends Seeder {
      *
      * @return void
      */
-    public function run(Topics $topics, Subtopics $subtopics) {
+    public function run(Topic $topics, Subtopic $subtopics) {
 
         $topic_array = [
             'Sport' => ['Football', 'Basketball', 'Handball'],

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSimilarPostsTable extends Migration
+class CreateRelatedpostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateSimilarPostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('similar_posts', function (Blueprint $table) {
+        Schema::create('relatedposts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('post_id')->unsigned();
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('similar_post_id')->unsigned();
-            $table->foreign('similar_post_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('relatedpost_id')->unsigned();
+            $table->foreign('relatedpost_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateSimilarPostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('similar_posts');
+        Schema::dropIfExists('relatedposts');
     }
 }

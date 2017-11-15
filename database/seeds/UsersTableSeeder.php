@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
-use App\Roles;
+use App\Role;
 
 class UsersTableSeeder extends Seeder {
 
@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder {
      *
      * @return void
      */
-    public function run(User $user, Roles $roles) {
+    public function run(User $user, Role $roles) {
 
         $admin = $user->create([
             'name' => 'BlogAdmin',

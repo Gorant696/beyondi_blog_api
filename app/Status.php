@@ -12,7 +12,7 @@ class Status extends Model {
     
  public function posts(){
      
-   return  $this->belongsto(Posts::class);
+   return  $this->hasmany(Post::class);
      
     }
     

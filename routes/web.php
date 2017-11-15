@@ -47,5 +47,7 @@ $router->post('/users', 'UserController@create');
 
 $router->get('/posts', 'PostsController@all');
 
+$router->get('/similar', 'PostsController@similar');
+
 
 

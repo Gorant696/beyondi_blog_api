@@ -4,19 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Subtopics extends Model {
+class Subtopic extends Model {
     
     public $timestamps = false;
     
     public function topics(){
         
-        return $this->belongsto(Topics::class);
+        return $this->belongsto(Topic::class);
         
     }
     
     public function posts(){
         
-        return $this->hasmany(Posts::class);
+        return $this->belongstomany(Post::class, 'subtopic_posts', 'subtopic_id', 'post_id');
         
     }
     

@@ -13,7 +13,7 @@ class CreateRelatedPostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('relatedPosts', function (Blueprint $table) {
+        Schema::create('related_posts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('post_id')->unsigned();
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade')->onUpdate('cascade');
@@ -30,6 +30,6 @@ class CreateRelatedPostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('relatedPosts');
+        Schema::dropIfExists('related_posts');
     }
 }

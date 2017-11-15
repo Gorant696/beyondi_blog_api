@@ -2,19 +2,18 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
-{
+class DatabaseSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
-        //$this->call('StatusesTableSeeder');
-       $this->call('RolesTableSeeder');
+    public function run() {
+        $this->call('StatusesTableSeeder');
+        $this->call('RolesTableSeeder');
         $this->call('UsersTableSeeder');
-        $this->call('TopicTableSeeder'); 
-       
+        $this->call('TopicTableSeeder');
     }
+
 }

@@ -18,6 +18,12 @@ class Comments extends Model {
         
     }
     
+    public function likes(){
+        
+        return $this->hasmany(Likes::class);
+        
+    }
+    
 
     
 }

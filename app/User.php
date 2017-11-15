@@ -62,6 +62,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         
     }
     
+    public function likes(){
+        
+        return $this->hasone(Likes::class);
+        
+    }
+    
   
     
     

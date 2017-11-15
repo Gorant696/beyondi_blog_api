@@ -44,7 +44,7 @@ class Posts extends Model {
         
     }
     
-    public function relatedposts(){
+   /* public function relatedposts(){
         
         return $this->belongstomany(Posts::class, 'relatedposts', 'post_id', 'related_post_id');
         
@@ -54,7 +54,7 @@ class Posts extends Model {
         
         return $this->belongstomany(Posts::class, 'similarposts', 'post_id', 'similar_post_id');
         
-    }
+    }*/
     
     public function visitors(){
         

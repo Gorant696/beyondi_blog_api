@@ -7,155 +7,122 @@
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
         $router->get('/users', [
-            'roles' => ['admin', 'user'],
             'uses' => 'UserController@all'
     ]);
-     
+        
         $router->get('/users/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'UserController@finduser'
     ]);
              
         $router->get('/posts', [
-            'roles' => ['admin', 'user'],
             'uses' => 'PostsController@all'
     ]);
         
         $router->get('/posts/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'PostsController@findpost'
     ]);
         
         $router->post('/posts', [
-            'roles' => ['admin', 'user'],
             'uses' => 'PostsController@create'
     ]);
         
         $router->get('/comments', [
-            'roles' => ['admin', 'user'],
             'uses' => 'CommentsController@all'
     ]);
         
         $router->get('/comments/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'CommentsController@findcomment'
     ]);
         
         $router->post('/comments', [
-            'roles' => ['admin', 'user'],
             'uses' => 'CommentsController@create'
     ]);
         
         $router->get('/likes', [
-            'roles' => ['admin', 'user'],
             'uses' => 'LikesController@all'
     ]);
         
         $router->get('/likes/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'LikesController@findlike'
     ]);
         
         $router->post('/likes', [
-            'roles' => ['admin', 'user'],
             'uses' => 'LikesController@create'
     ]);
         
         $router->get('/relatedposts', [
-            'roles' => ['admin', 'user'],
             'uses' => 'RelatedpostsController@all'
     ]);
         
         $router->get('/relatedposts/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'RelatedpostsController@findrelatedpost'
     ]);
         
         $router->post('/relatedposts', [
-            'roles' => ['admin', 'user'],
             'uses' => 'RelatedpostsController@create'
     ]);
         
         $router->get('/similarposts', [
-            'roles' => ['admin', 'user'],
             'uses' => 'SimilarpostsController@all'
     ]);
         
         $router->get('/similarposts/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'SimilarpostsController@findsimilarpost'
     ]);
         
         $router->post('/similarposts', [
-            'roles' => ['admin', 'user'],
             'uses' => 'SimilarpostsController@create'
     ]);
         
         $router->get('/status', [
-            'roles' => ['admin', 'user'],
             'uses' => 'StatusController@all'
     ]);
         
         $router->get('/status/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'StatusController@findstatus'
     ]);
         
         $router->get('/subtopics', [
-            'roles' => ['admin', 'user'],
             'uses' => 'SubtopicsController@all'
     ]);
         
         $router->get('/subtopics/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'SubtopicsController@findsubtopic'
     ]);
         
         $router->get('/tags', [
-            'roles' => ['admin', 'user'],
             'uses' => 'TagsController@all'
     ]);
         
         $router->get('/tags/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'TagsController@findtag'
     ]);
         
         $router->post('/tags', [
-            'roles' => ['admin', 'user'],
             'uses' => 'TagsController@create'
     ]);
         
         $router->get('/topics', [
-            'roles' => ['admin', 'user'],
             'uses' => 'TopicsController@all'
     ]);
         
         $router->get('/topics/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'TopicsController@findtopic'
     ]);
         
         $router->get('/visitors', [
-            'roles' => ['admin', 'user'],
             'uses' => 'VisitorsController@all'
     ]);
         
         $router->get('/visitors/{id}', [
-            'roles' => ['admin', 'user'],
             'uses' => 'VisitorsController@findvisitor'
     ]);
         
         $router->get('/logout', [
-            'roles' => ['admin', 'user'],
             'uses' => 'MyController@logoutuser'
     ]);
-        
-        
-        
-        
-    
-});
+         
+}); //end route group
 
 
 
@@ -236,6 +203,16 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
         $router->delete('/roles', [
             'roles' => ['admin'],
             'uses' => 'RolesController@delete'
+    ]);
+        
+        $router->put('/addrole', [
+            'roles' => ['admin'],
+            'uses' => 'RolesController@AddRoleToUser'
+    ]);
+        
+        $router->put('/removerole', [
+            'roles' => ['admin'],
+            'uses' => 'RolesController@RemoveRoleFromUser'
     ]);
         
         $router->put('/similarposts/{id}', [
@@ -319,7 +296,7 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
     ]);
         
     
-});
+}); //end route groupe
 
 
 
@@ -331,7 +308,7 @@ $router->post('/login', 'AuthController@login');
 
 $router->post('/users', 'UserController@create');
 
-$router->get('/ip', 'PostsController@test');
+
 
 
 

@@ -18,7 +18,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         
         $router->get('/logout', [
             'roles' => ['admin', 'user'],
-            'uses' => 'UserController@logoutuser'
+            'uses' => 'MyController@logoutuser'
     ]);
              
         $router->get('/posts', [
@@ -330,6 +330,8 @@ $router->get('/', 'AuthController@index');
 $router->post('/login', 'AuthController@login');
 
 $router->post('/users', 'UserController@create');
+
+$router->get('/ip', 'PostsController@test');
 
 
 

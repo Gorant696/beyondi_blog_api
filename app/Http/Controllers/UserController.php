@@ -16,14 +16,7 @@ class UserController extends Controller {
 
     
     
-        public function logoutuser() {
-
-        if ($token = JWTAuth::gettoken()) {
-            JWTAuth::invalidate($token);
-
-            return response()->json(['message' => 'You have successfully signed out!']);
-        }
-    }
+        
 
 
     public function create(Request $request, User $user) {

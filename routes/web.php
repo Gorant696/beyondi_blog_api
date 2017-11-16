@@ -15,11 +15,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
             'roles' => ['admin', 'user'],
             'uses' => 'UserController@finduser'
     ]);
-        
-        $router->get('/logout', [
-            'roles' => ['admin', 'user'],
-            'uses' => 'MyController@logoutuser'
-    ]);
              
         $router->get('/posts', [
             'roles' => ['admin', 'user'],
@@ -149,6 +144,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->get('/visitors/{id}', [
             'roles' => ['admin', 'user'],
             'uses' => 'VisitorsController@findvisitor'
+    ]);
+        
+        $router->get('/logout', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'MyController@logoutuser'
     ]);
         
         

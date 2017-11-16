@@ -106,12 +106,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
             'uses' => 'StatusController@findstatus'
     ]);
         
-        $router->get('/subtopic', [
+        $router->get('/subtopics', [
             'roles' => ['admin', 'user'],
             'uses' => 'SubtopicsController@all'
     ]);
         
-        $router->get('/subtopic/{id}', [
+        $router->get('/subtopics/{id}', [
             'roles' => ['admin', 'user'],
             'uses' => 'SubtopicsController@findsubtopic'
     ]);
@@ -263,17 +263,17 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
             'uses' => 'StatusController@delete'
     ]);
         
-        $router->post('/subtopic', [
+        $router->post('/subtopics', [
             'roles' => ['admin'],
             'uses' => 'SubtopicsController@create'
     ]);
         
-        $router->put('/subtopic/{id}', [
+        $router->put('/subtopics/{id}', [
             'roles' => ['admin'],
             'uses' => 'SubtopicsController@update'
     ]);
         
-        $router->delete('/subtopic/{id}', [
+        $router->delete('/subtopics/{id}', [
             'roles' => ['admin'],
             'uses' => 'SubtopicsController@delete'
     ]);
@@ -310,12 +310,12 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
         
         $router->put('/visitors/{id}', [
             'roles' => ['admin'],
-            'uses' => 'TopicsController@update'
+            'uses' => 'VisitorsController@update'
     ]);
         
         $router->delete('/visitors/{id}', [
             'roles' => ['admin'],
-            'uses' => 'TopicsController@delete'
+            'uses' => 'VisitorsController@delete'
     ]);
         
     

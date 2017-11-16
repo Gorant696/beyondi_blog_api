@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Post;
+use App\Visitor;
 
 use JWTAuth;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException as ExpiredExc;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException as InvalidExc;
 use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 
-class PostsController extends Controller {
+class VisitorsController extends Controller {
 
   
     public function __construct() {
@@ -26,7 +26,7 @@ class PostsController extends Controller {
         
     }
     
-    public function findpost($id){
+    public function findvisitor($id){
         
         return response()->json([]);
         
@@ -49,6 +49,6 @@ class PostsController extends Controller {
         return response()->json([]);
         
     }
-
+    
 
 }

@@ -2,18 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Role;
 use App\Post;
-use App\Relatedpost;
-use App\Similarpost;
-use App\Visitor;
-use App\Comment;
-use App\Subtopic;
-use App\Topic;
-use App\Like;
-use App\Tag;
-use App\Status;
 
 use JWTAuth;
 use Illuminate\Http\Request;
@@ -40,13 +29,7 @@ class PostsController extends Controller {
         
     }
     
-    public function similar(){
-        
-   $data= User::all();
-   
-   return response()->json(['Posts'=>$data]);
-        
-    }
+
     
 
 }

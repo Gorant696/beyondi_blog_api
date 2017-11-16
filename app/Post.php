@@ -53,7 +53,7 @@ class Post extends Model {
     
     public function relatedposts(){
         
-        return $this->hasmany(Relatedpost::clas);
+        return $this->hasmany(Relatedpost::class);
         
     }
     

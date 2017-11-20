@@ -20,35 +20,7 @@ class CommentsController extends Controller {
      
     }
     
-    public function all(){
-        
-        return response()->json([]);
-        
-    }
-    
-    public function findcomment($id){
-        
-        return response()->json([]);
-        
-    }
-    
-    public function create(){
-        
-        return response()->json([]);
-        
-    }
-    
-     public function update($id){
-        
-        return response()->json([]);
-        
-    }
-    
-    public function delete($id){
-        
-        return response()->json([]);
-        
-    }
+  
     
 
 }

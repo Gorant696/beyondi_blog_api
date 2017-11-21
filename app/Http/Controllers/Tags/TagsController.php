@@ -24,7 +24,7 @@ class TagsController extends BasicController {
             'tag_name' => 'required|max:20',
         ]);
        
-       try{
+       try {
             $tag->name = $request->input('tag_name');
             $tag->save();
             
@@ -35,6 +35,18 @@ class TagsController extends BasicController {
            return response()->json(['message'=>'Tag already exists!']);
        }
 
+        
+    }
+    
+    public function get_posts($id){
+        
+        if(!$tag_posts = Tag::with('posts')->where('id', $id)->first()){
+            
+            return response()->json(['message'=>"Can't find tag"]);
+            
+        }
+        
+        return response()->json(['data' => $tag_posts]);
         
     }
     

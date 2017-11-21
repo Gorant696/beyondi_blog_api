@@ -28,13 +28,13 @@ class AuthRoleMiddleware {
             if (in_array($userRole, $actions['roles'])) {
 
                 return $next($request);
-            } else {
-                return response()->json(['message' => 'You are not allowed to access this method!']);
-            } //else
-        } //endforeach
+            } 
+
+        } 
+        
+        return response()->json(['message' => 'You are not allowed to access this method!']);
     }
 
-//end public function handle
 }
 
-//end class
+

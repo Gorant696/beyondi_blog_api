@@ -4,7 +4,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     
     $router->post('/tags', 'TagsController@create');
     
-        
+    $router->get('/tags/{id}/posts', 'TagsController@get_posts');
 
          
 }); //end route group (middleware auth)
@@ -18,8 +18,6 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
             'uses' => 'TagsController@delete'
     ]);
     
-
-        
     
 }); //end route  group (middleware auth/authrole)
 

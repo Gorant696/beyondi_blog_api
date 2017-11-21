@@ -6,6 +6,7 @@ use App\Http\Controllers\BasicController;
 use \App\User;
 use \App\Role;
 use \App\Post;
+use \App\Status;
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,29 @@ class UsersController extends BasicController {
         $this->model = $user;
      
     }
+    
+    static protected function slug($text) {
+        
+        // replace non letter or digits by -
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // remove duplicate -
+        $text = preg_replace('~-+~', '-', $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        return $text;
+}
 
     public function create(Request $request, User $user) {
 
@@ -45,7 +69,7 @@ class UsersController extends BasicController {
 
         $user->roles()->attach($roles->id);
 
-        return response()->json(['message' => "Wellcome $user->name!"]);
+        return response()->json(['message' => "User $user->name created!"]);
     }
 
     public function update($id, Request $request) {
@@ -108,6 +132,41 @@ class UsersController extends BasicController {
         }
 
         return response()->json(['Data' => $post]);
+    }
+    
+    public function create_post(Request $request, Post $post){
+        
+        $this->validate($request, [
+            'title' => 'required|max:75',
+            'content' => 'required',
+            'status' => 'required',
+        ]);
+        
+        if (!$status = Status::where('status_key', $request->input('status'))->first()){
+            
+            return response()->json(['message'=>'Wrong status chosen!']);
+            
+        }
+        
+        $slug = self::slug($request->input('title'));
+        $auth_user = JWTAuth::parseToken()->toUser();
+
+        try {
+            $post->title= $request->input('title');
+            $post->content = $request->input('content');
+            $post->user_id = $auth_user->id;
+            $post->status_id = $status->id;
+            $post->slug = $slug;
+            $post->save();
+            
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => 'Invalid data']);
+            
+        }
+        
+        return response()->json(['message'=>'Post created successfully!']);
+        
     }
 
 }

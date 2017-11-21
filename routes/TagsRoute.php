@@ -2,6 +2,8 @@
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
+    $router->post('/tags', 'TagsController@create');
+    
         
 
          
@@ -9,6 +11,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
 
 $router->group(['middleware' => ['auth', 'authrole']], function () use ($router) {
+    
+    
+      $router->delete('/tags/{id}', [
+            'roles' => ['admin'],
+            'uses' => 'TagsController@delete'
+    ]);
     
 
         

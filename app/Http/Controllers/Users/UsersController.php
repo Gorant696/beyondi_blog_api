@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BasicController;
 use \App\User;
 use \App\Role;
 use \App\Post;
@@ -14,7 +14,14 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException as ExpiredExc;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException as InvalidExc;
 use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 
-class UsersController extends Controller {
+class UsersController extends BasicController {
+    
+    
+      public function __construct(User $user) {
+        
+        $this->model = $user;
+     
+    }
 
     public function create(Request $request, User $user) {
 
@@ -41,20 +48,6 @@ class UsersController extends Controller {
         return response()->json(['message' => "Wellcome $user->name!"]);
     }
 
-    public function all() {
-
-        $users = User::all();
-
-        return response()->json(['Users' => $users]);
-    }
-
-    public function find($id) {
-
-        $users = User::find($id);
-
-        return response()->json(['User' => $users]);
-    }
-
     public function update($id, Request $request) {
 
         $this->validate($request, [
@@ -62,7 +55,6 @@ class UsersController extends Controller {
             'email' => 'required|email|unique:users',
             'password' => 'required|max:20'
         ]);
-
 
         try {
             $user = User::find($id);
@@ -83,19 +75,6 @@ class UsersController extends Controller {
         } catch (\Exception $e) {
 
             return response()->json(['message' => $e->getMessage()]);
-        }
-    }
-
-    public function delete($id) {
-
-        try {
-            $user = User::find($id);
-
-            User::destroy($id);
-
-            return response()->json(['message' => "$user->name is deleted"]);
-        } catch (\Exception $e) {
-            
         }
     }
 

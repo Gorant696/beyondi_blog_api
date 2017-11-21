@@ -3,25 +3,38 @@
 namespace App\Http\Controllers\Tags;
 
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BasicController;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 
-class TagsController extends Controller {
+class TagsController extends BasicController {
 
   
-    public function __construct() {
-
+    public function __construct(Tag $tag) {
+        
+        $this->model = $tag;
      
     }
     
-    public function all(){
+    public function create(Tag $tag, Request $request){
         
-        $tags = Tag::all();
-        
-        return response()->json(['data' => $tags]);
+       $this->validate($request, [
+            'tag_name' => 'required|max:20',
+        ]);
+       
+       try{
+            $tag->name = $request->input('tag_name');
+            $tag->save();
+            
+            return response()->json(['message'=> 'Tag added!']);
+            
+       } catch (\Exception $e){
+           
+           return response()->json(['message'=>'Tag already exists!']);
+       }
+
         
     }
     

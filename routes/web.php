@@ -17,9 +17,6 @@ foreach ($namespace_array as $namespace =>$path){
 }
 
 
-
-
-
 //Public routes
 
 $router->get('/', 'AuthController@index');

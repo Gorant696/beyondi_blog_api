@@ -36,7 +36,6 @@ class UsersController extends Controller {
 
         $roles = Role::where('role_key', env('DEFAULT_USER_ROLE'))->first();
 
-
         $user->roles()->attach($roles->id);
 
         return response()->json(['message' => "Wellcome $user->name!"]);

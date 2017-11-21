@@ -2,7 +2,8 @@
 
 
 $namespace_array=[
-    'Users'=>'UsersRoute.php'
+    'Users'=>'UsersRoute.php',
+    'Tags' =>'TagsRoute.php'
     ];
 
 foreach ($namespace_array as $namespace =>$path){

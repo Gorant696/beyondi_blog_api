@@ -81,7 +81,6 @@ class TopicsController extends BasicController {
         $data= $subtopics->subtopics()->get();
         
         return response()->json(['Message' => $data]);
-        
     }
     
     
@@ -91,7 +90,6 @@ class TopicsController extends BasicController {
         if(!$subtopic = Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){
             
             return response()->json(['Message' => "Can't find subtopic!"]);
-            
         }
         
         return response()->json(['Message' => $subtopic]);
@@ -122,4 +120,47 @@ class TopicsController extends BasicController {
         
         return response()->json(['Message' => "Subtopic created successfully!"]);
     }
+    
+    
+    public function update_subtopic($id, $subtopic_id, Request $request){
+        
+        $this->validate($request, [
+            'name' => 'required|max:50',
+            'subtopic_key' => 'required|max:50',
+        ]);
+        
+        if (!$subtopic=Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){
+            
+            return response()->json(['Message' => "Can't find subtopic!"]);
+        }
+        
+        try {
+        $subtopic->update([
+            'name'=>$request->input('name'),
+            'subtopic_key'=>$request->input('subtopic_key')
+        ]);
+        } catch (\Exception $e){
+            
+            return response()->json(['Message' => "Invalid data!"]);
+        }
+        
+        return response()->json(['Message' => "Subtopic updated successfully!"]);
+    }
+    
+    
+    public function delete_subtopic($id, $subtopic_id, Subtopic $subtopic){
+        
+        $this->model=$subtopic;
+        
+       if (!$find_subtopic= Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){
+           
+           return response()->json(['Message' => "Can't find subtopic!"]);
+       }
+       
+       return $this->delete($find_subtopic->id);
+        
+        
+    }
+    
+        
 }

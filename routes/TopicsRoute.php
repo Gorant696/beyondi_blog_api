@@ -30,6 +30,16 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
             'roles' => ['admin'],
             'uses' => 'TopicsController@create_subtopic'
     ]);
+      
+      $router->put('/topics/{id}/subtopics/{subtopic_id}', [
+            'roles' => ['admin'],
+            'uses' => 'TopicsController@update_subtopic'
+    ]);
+      
+      $router->delete('/topics/{id}/subtopics/{subtopic_id}', [
+            'roles' => ['admin'],
+            'uses' => 'TopicsController@delete_subtopic'
+    ]);
      
          
         

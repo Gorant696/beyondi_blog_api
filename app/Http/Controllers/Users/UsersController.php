@@ -56,21 +56,19 @@ class UsersController extends BasicController {
             'password' => 'required|confirmed|max:20',
                 //u input treba staviti "password_confirmation" inputi u njemu ponoviti lozinku
         ]);
-
+        
+        $roles = Role::where('role_key', env('DEFAULT_USER_ROLE'))->first();
         $pass = $request->input('password');
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = app('hash')->make($pass);
         $user->save();
-
-
-        $roles = Role::where('role_key', env('DEFAULT_USER_ROLE'))->first();
-
         $user->roles()->attach($roles->id);
 
         return response()->json(['message' => "User $user->name created!"]);
     }
+    
 
     public function update($id, Request $request) {
 
@@ -94,8 +92,8 @@ class UsersController extends BasicController {
             $user->password = app('hash')->make($pass);
             $user->save();
 
-
             return response()->json(['message' => 'Updated successfully!']);
+            
         } catch (\Exception $e) {
 
             return response()->json(['message' => $e->getMessage()]);
@@ -104,7 +102,6 @@ class UsersController extends BasicController {
     
 
     public function get_posts($id) {
-
 
         if (!$posts = Post::where('user_id', $id)->get()) {
 
@@ -148,7 +145,6 @@ class UsersController extends BasicController {
         if (!$status = Status::where('status_key', $request->input('status'))->first()){
             
             return response()->json(['message'=>'Wrong status chosen!']);
-            
         }
         
         $slug = self::slug($request->input('title'));
@@ -165,11 +161,9 @@ class UsersController extends BasicController {
         } catch (\Exception $e){
             
             return response()->json(['message' => 'Invalid data']);
-            
         }
         
         return response()->json(['message'=>'Post created successfully!']);
-        
     }
     
     
@@ -208,6 +202,7 @@ class UsersController extends BasicController {
 
     }
     
+    
     public function delete_post($id, $post_id, Post $post){
         
         $this->model = $post;
@@ -221,16 +216,20 @@ class UsersController extends BasicController {
         return $this->delete($post_find->id);
     }
     
+    
     public function get_visits($id){
         
-         if (!$user_visits= Visitor::where('user_id', $id)->with('posts')->get()){
-             
-             return response()->json(['message' => "Can't find!"]);
-             
-         }
+        if (!User::find($id)){
+            
+            return response()->json(['message' => "Can't find!"]);
+            
+        }
+        
+        $user_visits = Visitor::where('user_id', $id)->with('posts')->get();
 
         return response()->json(['data' => $user_visits]);
     }
+    
     
     public function get_comments($id){
         

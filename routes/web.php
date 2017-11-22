@@ -2,9 +2,10 @@
 
 
 $namespace_array=[
-    'Users'=>'UsersRoute.php',
-    'Tags' =>'TagsRoute.php', 
-    'Roles' =>'RolesRoute.php'
+        'Users'=>'UsersRoute.php',
+        'Tags' =>'TagsRoute.php', 
+        'Roles' =>'RolesRoute.php',
+        'Topics' =>'TopicsRoute.php'
     ];
 
 foreach ($namespace_array as $namespace =>$path){

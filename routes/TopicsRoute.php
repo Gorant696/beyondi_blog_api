@@ -2,9 +2,7 @@
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
-    $router->get('/topics', 'TopicsController@all');
-    
-    $router->get('/topics/{id}', 'TopicsController@find');
+  
    
          
 }); //end route group (middleware auth)
@@ -23,6 +21,16 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
             'uses' => 'TopicsController@create'
     ]);
      
+     $router->put('/topics/{id}', [
+            'roles' => ['admin'],
+            'uses' => 'TopicsController@update'
+    ]);
+     
+      $router->post('/topics/{id}/subtopics', [
+            'roles' => ['admin'],
+            'uses' => 'TopicsController@create_subtopic'
+    ]);
+     
          
         
     
@@ -31,3 +39,11 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
 
 
 //public routes
+
+  $router->get('/topics', 'TopicsController@all');
+    
+  $router->get('/topics/{id}', 'TopicsController@find');
+  
+  $router->get('topics/{id}/subtopics', 'TopicsController@get_subtopics');
+  
+  $router->get('topics/{id}/subtopics/{subtopic_id}', 'TopicsController@get_subtopic');

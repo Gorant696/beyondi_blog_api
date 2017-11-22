@@ -118,6 +118,7 @@ class UsersController extends BasicController {
 
             return response()->json(['message' => "Can't find!"]);
         }
+        
         $auth_user = JWTAuth::parseToken()->toUser();
 
         try {

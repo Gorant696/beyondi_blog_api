@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subtopic extends Model {
     
     public $timestamps = false;
+     protected $fillable = ['subtopic_key', 'name'];
     
     public function topics(){
         

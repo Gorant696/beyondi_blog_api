@@ -10,7 +10,7 @@ class Subtopic extends Model {
     
     public function topics(){
         
-        return $this->belongsto(Topic::class);
+        return $this->belongsto(Topic::class, 'topic_id');
         
     }
     

@@ -8,13 +8,13 @@ class Comment extends Model {
     
      public function posts(){
         
-        return $this->belongsto(Post::class);
+        return $this->belongsto(Post::class, 'post_id');
         
     }
     
     public function users(){
         
-        return $this->belongsto(User::class);
+        return $this->belongsto(User::class, 'user_id');
         
     }
     

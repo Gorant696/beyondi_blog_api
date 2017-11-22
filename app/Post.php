@@ -8,7 +8,7 @@ class Post extends Model {
     
     public function users(){
         
-       return $this->belongsto(User::class);
+       return $this->belongsto(User::class, 'user_id');
         
     }
     
@@ -40,7 +40,7 @@ class Post extends Model {
     
     public function status(){
         
-        return $this->belongsto(Status::class);
+        return $this->belongsto(Status::class, 'status_id');
         
     }
     

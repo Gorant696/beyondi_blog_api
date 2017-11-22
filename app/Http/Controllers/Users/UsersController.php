@@ -7,6 +7,7 @@ use \App\User;
 use \App\Role;
 use \App\Post;
 use \App\Status;
+use \App\Visitor;
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -48,7 +49,6 @@ class UsersController extends BasicController {
 }
 
     public function create(Request $request, User $user) {
-
 
         $this->validate($request, [
             'name' => 'required|max:20',
@@ -101,6 +101,7 @@ class UsersController extends BasicController {
             return response()->json(['message' => $e->getMessage()]);
         }
     }
+    
 
     public function get_posts($id) {
 
@@ -113,6 +114,7 @@ class UsersController extends BasicController {
         return response()->json(['Data' => $posts]);
     }
 
+    
     public function get_post($id, $post_id) {
 
         if (!$post = Post::where('id', $post_id)->where('user_id', $id)->first()) {
@@ -133,6 +135,7 @@ class UsersController extends BasicController {
 
         return response()->json(['Data' => $post]);
     }
+    
     
     public function create_post(Request $request, Post $post){
         
@@ -167,6 +170,79 @@ class UsersController extends BasicController {
         
         return response()->json(['message'=>'Post created successfully!']);
         
+    }
+    
+    
+    public function update_post($id, $post_id, Request $request){
+        
+        $this->validate($request, [
+            'title' => 'required|max:75',
+            'content' => 'required',
+            'status' => 'required'
+        ]);
+        
+        if (!$status = Status::where('status_key', $request->input('status'))->first()){
+            
+            return response()->json(['message'=>'Wrong status chosen!']);
+            
+        }
+        
+        if (!$post = Post::where('user_id', $id)->where('id', $post_id)->first()){
+            
+            return response()->json(['message' => "Can't find post"]);
+        }
+        
+        try {
+            $post->title= $request->input('title');
+            $post->content = $request->input('content');
+            $post->status_id = $status->id;
+            $post->save();
+            
+        } catch (Exception $e){
+            
+            return response()->json(['message' => 'Invalid data']);
+            
+        }
+        
+        return response()->json(['message'=>'Post updated successfully!']);
+
+    }
+    
+    public function delete_post($id, $post_id, Post $post){
+        
+        $this->model = $post;
+        
+        if (!$post_find = Post::where('user_id', $id)->where('id', $post_id)->first()){
+            
+            return response()->json(['message' => "Can't find!"]);
+            
+        }
+        
+        return $this->delete($post_find->id);
+    }
+    
+    public function get_visits($id){
+        
+         if (!$user_visits= Visitor::where('user_id', $id)->with('posts')->get()){
+             
+             return response()->json(['message' => "Can't find!"]);
+             
+         }
+
+        return response()->json(['data' => $user_visits]);
+    }
+    
+    public function get_comments($id){
+        
+        if(!$user=User::find($id)){
+            
+             return response()->json(['message' => "Can't find!"]);  
+        }
+        
+        $data = $user->comments()->get();
+
+        return response()->json(['data' => $data]);
+  
     }
 
 }

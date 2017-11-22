@@ -9,13 +9,13 @@ class Like extends Model {
 
     public function comments(){
         
-        return $this->belongsto(Comment::class);
+        return $this->belongsto(Comment::class, 'comment_id');
         
     }
     
     public function users(){
         
-        return $this->belongsto(User::class);
+        return $this->belongsto(User::class, 'user_id');
         
     }
     

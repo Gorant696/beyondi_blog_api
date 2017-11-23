@@ -21,7 +21,7 @@ class CreateVisitorsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('ip_adress');
             $table->unique(array('post_id', 'user_id'));
-            $table->unique(array('ip_adress', 'post_id'));
+            
         });
     }
 

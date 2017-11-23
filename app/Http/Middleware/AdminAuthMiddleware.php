@@ -7,6 +7,7 @@ use App\User;
 use App\Post;
 use App\Comment;
 use App\Like;
+use App\Visitor;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use JWTAuth;

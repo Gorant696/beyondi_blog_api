@@ -61,7 +61,8 @@ $app->singleton(
 // ]);
  $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-     'authrole' => 'App\Http\Middleware\AuthRoleMiddleware'
+     'authrole' => 'App\Http\Middleware\AuthRoleMiddleware',
+     'admin_auth' => 'App\Http\Middleware\AdminAuthMiddleware',
  ]);
 /*
 |--------------------------------------------------------------------------

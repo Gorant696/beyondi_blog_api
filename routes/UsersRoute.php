@@ -6,9 +6,9 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
       $router->get('/users/{id}', 'UsersController@find');
     
-      $router->get('/users/{id}/posts', 'UsersController@get_posts');
       
-      $router->get('/users/{id}/posts/{post_id}', 'UsersController@get_post');
+      
+      //$router->get('/users/{id}/posts/{post_id}', 'UsersController@get_post');
       
       $router->post('/users/posts', 'UsersController@create_post');
       
@@ -35,6 +35,18 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
             'uses' => 'UsersController@delete'
     ]);
          
+        
+    
+}); //end route  group (middleware auth/authrole)
+
+$router->group(['middleware' => ['auth', 'admin_auth']], function () use ($router) {
+    
+
+        $router->get('/users/{id}/posts/{post_id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'UsersController@get_post'
+    ]);
+     //    $router->get('/users/{id}/posts', 'UsersController@get_posts');
         
     
 }); //end route  group (middleware auth/authrole)

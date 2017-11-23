@@ -5,7 +5,8 @@ $namespace_array=[
         'Users'=>'UsersRoute.php',
         'Tags' =>'TagsRoute.php', 
         'Roles' =>'RolesRoute.php',
-        'Topics' =>'TopicsRoute.php'
+        'Topics' =>'TopicsRoute.php',
+        'Posts'=>'PostsRoute.php'
     ];
 
 foreach ($namespace_array as $namespace =>$path){

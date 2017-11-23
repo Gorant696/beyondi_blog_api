@@ -6,24 +6,14 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
       $router->get('/users/{id}', 'UsersController@find');
     
-      
-      
-      //$router->get('/users/{id}/posts/{post_id}', 'UsersController@get_post');
-      
       $router->post('/users/posts', 'UsersController@create_post');
-      
-      $router->put('/users/{id}', 'UsersController@update');
-      
-      $router->put('/users/{id}/posts/{post_id}', 'UsersController@update_post');
-      
-      $router->delete('/users/{id}/posts/{post_id}', 'UsersController@delete_post');
       
       $router->get('/users/{id}/visitors', 'UsersController@get_visits');
       
       $router->get('/users/{id}/comments', 'UsersController@get_comments');
+      
+      $router->get('/users/{id}/roles', 'UsersController@get_roles');
              
-   
-         
 }); //end route group (middleware auth)
 
 
@@ -35,8 +25,6 @@ $router->group(['middleware' => ['auth', 'authrole']], function () use ($router)
             'uses' => 'UsersController@delete'
     ]);
          
-        
-    
 }); //end route  group (middleware auth/authrole)
 
 $router->group(['middleware' => ['auth', 'admin_auth']], function () use ($router) {
@@ -46,8 +34,28 @@ $router->group(['middleware' => ['auth', 'admin_auth']], function () use ($route
             'roles' => ['admin', 'user'],
             'uses' => 'UsersController@get_post'
     ]);
-     //    $router->get('/users/{id}/posts', 'UsersController@get_posts');
         
+        $router->put('/users/{user_id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'UsersController@update'
+    ]);
+        
+        $router->get('/users/{user_id}/posts', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'UsersController@get_posts'
+    ]);
+        
+        $router->delete('/users/{id}/posts/{post_id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'UsersController@delete_post'
+    ]);
+        
+        $router->put('/users/{id}/posts/{post_id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'UsersController@update_post'
+    ]);
+        
+    
     
 }); //end route  group (middleware auth/authrole)
 

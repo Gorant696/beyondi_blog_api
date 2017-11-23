@@ -70,7 +70,7 @@ class UsersController extends BasicController {
     }
     
 
-    public function update($id, Request $request) {
+    public function update($user_id, Request $request) {
 
         $this->validate($request, [
             'name' => 'required|max:20',
@@ -79,7 +79,7 @@ class UsersController extends BasicController {
         ]);
 
         try {
-            $user = User::find($id);
+            $user = User::find($user_id);
 
             if (!$user) {
                 return response()->json(['message' => 'User with this ID does not exist!']);
@@ -101,9 +101,9 @@ class UsersController extends BasicController {
     }
     
 
-    public function get_posts($id) {
+    public function get_posts($user_id) {
 
-        if (!$posts = Post::where('user_id', $id)->get()) {
+        if (!$posts = Post::where('user_id', $user_id)->get()) {
 
             return response()->json(['message' => "User doesn't exist!"]);
         }
@@ -243,6 +243,19 @@ class UsersController extends BasicController {
 
         return response()->json(['data' => $data]);
   
+    }
+    
+    public function get_roles($id){
+        
+        if (!$user = User::find($id)){
+            
+            return response()->json(['message' => "Can't find!"]);  
+            
+        }
+        
+       $data= $user->roles()->get();
+        
+        return response()->json(['data' => $data]);  
     }
 
 }

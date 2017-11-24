@@ -31,8 +31,9 @@ class AdminAuthMiddleware {
 
     public function handle($request, Closure $next) {
 
-
+        
         $route = $request->route();
+     
         $actions = $route[1];
         $parameters_id = $route[2];
         $token = JWTAuth::gettoken();

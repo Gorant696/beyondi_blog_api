@@ -6,6 +6,8 @@ use App\Http\Controllers\BasicController;
 use App\Post;
 use App\Comment;
 use App\Relatedpost;
+use App\Similarpost;
+use App\Visitor;
 
 use JWTAuth;
 use Illuminate\Http\Request;
@@ -75,7 +77,140 @@ class PostsController extends BasicController {
         return response()->json(['message' => $data]);
     }
     
-   
+     public function get_relatedpost($id, $relatedpost_id){
+        
 
+        if (!$model = $this->model->find($id)){
+            
+            return response()->json(['message' => "Can't find!"]); 
+        }
+        
+        
+        if (!$data= $model->relatedposts()->where('relatedpost_id', $relatedpost_id)->first()){
+            
+            return response()->json(['message' => "Can't find!"]); 
+        }
+ 
+        
+        return response()->json(['message' => $data]);
+    }
+    
+    
+    public function get_similarposts($id){
+        
+        if (!$model = $this->model->find($id)){
+            
+           return response()->json(['message' => "Can't find!"]); 
+        }
+        
+        $data = $model->similarposts()->get();
+        
+        return response()->json(['message' => $data]);
+    }
+    
+    
+    public function get_similarpost($id, $similarpost_id){
+        
+        if (!$model = $this->model->find($id)){
+            
+            return response()->json(['message' => "Can't find!"]); 
+        }
+        
+        if (!$data= $model->similarposts()->where('similarpost_id', $similarpost_id)->first()){
+            
+            return response()->json(['message' => "Can't find!"]); 
+        }
+ 
+        return response()->json(['message' => $data]);
+    }
+    
+    
+    public function delete_visitors($post_id, Visitor $visitor){
+        
+        $find = $visitor->where('post_id', $post_id)->get();
+        $data = $find->pluck('id');
 
+            foreach ($data as $delete_id){
+
+                $visitor->destroy($delete_id);
+            }
+
+        return response()->json(['message' => 'Deleted!']);
+    }
+    
+    public function delete_comment($id, $comment_id, Comment $comment){
+        
+        
+         $this->model = $comment;
+        
+        if (!$comment_find = $this->model->where('post_id', $id)->where('id', $comment_id)->first()){
+            
+            return response()->json(['message' => "Can't find!"]);
+            
+        }
+        
+        return $this->delete($comment_find->id);
+        
+    }
+    
+    
+     public function delete_relatedpost($id, $post_id, Relatedpost $relatedpost){
+        
+         $this->model = $relatedpost;
+        
+        if (!$relatedpost_find = $this->model->where('post_id', $post_id)->where('id', $id)->first()){
+            
+            return response()->json(['message' => "Can't find!"]);
+        }
+        
+        return $this->delete($relatedpost_find->id);
+    }
+    
+    
+      public function delete_similarpost($id, $post_id, Similarpost $similarpost){
+        
+         $this->model = $similarpost;
+        
+        if (!$similarpost_find = $this->model->where('post_id', $post_id)->where('id', $id)->first()){
+            
+            return response()->json(['message' => "Can't find!"]);
+        }
+        
+        return $this->delete($similarpost_find->id);
+    }
+    
+    
+    public function create_comment($id, Request $request){
+        
+        $this->validate($request, [
+            'content' => 'required',
+        ]);
+        
+        if (!$post = $this->model->find($id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        $auth_user = JWTAuth::parseToken()->toUser();
+        
+        try {
+        $post->comments()->create([
+            'content'=> $request->input('content'),
+            'user_id' => $auth_user->id,
+            'post_id' => $id
+        ]);
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        return response()->json(['message' => "Comment created successfully!"]);
+        
+    }
+    
+    public function create_relatedpost(){
+        
+        
+        
+    }
 }

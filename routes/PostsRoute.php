@@ -51,10 +51,24 @@ $router->group(['middleware' => ['auth', 'admin_auth']], function () use ($route
             'uses' => 'PostsController@delete_similarpost'
     ]);
         
-        $router->post('/posts/{post_id}/relatedposts/{id}', [
+        $router->post('/posts/{post_id}/relatedposts', [
             'roles' => ['admin', 'user'],
             'uses' => 'PostsController@create_relatedpost'
     ]);
+        
+        $router->post('/posts/{post_id}/similarposts', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'PostsController@create_similarpost'
+    ]);
+        
+        $router->put('/posts/{id}/comments/{comment_id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'PostsController@update_comment'
+    ]);
+        
+        
+    
+
 
 
     

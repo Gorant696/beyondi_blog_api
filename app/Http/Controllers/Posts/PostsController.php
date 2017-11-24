@@ -8,7 +8,6 @@ use App\Comment;
 use App\Relatedpost;
 use App\Similarpost;
 use App\Visitor;
-
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -208,9 +207,71 @@ class PostsController extends BasicController {
         
     }
     
-    public function create_relatedpost(){
+    public function create_relatedpost($post_id, Request $request){
         
+        $this->validate($request, [
+            'relatedpost_id'=> 'required'
+        ]);
         
+         if (!$post = $this->model->find($post_id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
         
+        try {
+        $post->relatedposts()->create([
+            'post_id'=>$post_id,
+            'relatedpost_id'=>$request->input('relatedpost_id')
+        ]);
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        return response()->json(['message' => "You successfully added related post!"]);
+    }
+    
+    
+    public function create_similarpost($post_id, Request $request){
+        
+        $this->validate($request, [
+            'similarpost_id'=> 'required'
+        ]);
+        
+         if (!$post = $this->model->find($post_id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        try {
+        $post->similarposts()->create([
+            'post_id'=>$post_id,
+            'similarpost_id'=>$request->input('similarpost_id')
+        ]);
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        return response()->json(['message' => "You successfully added related post!"]);
+    }
+    
+    
+    public function update_comment($id, $comment_id, Request $request, Comment $comment){
+        
+        $this->validate($request, [
+            'content' => 'required',
+        ]);
+        
+        if (!$model = $comment->where('id', $comment_id)->where('post_id', $id)->first()){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        try {
+            $model->update($request->all());
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        return response()->json(['message' => "Comment updated successfully!"]);
     }
 }

@@ -1,22 +1,20 @@
 <?php
 
+$namespace_array = [
+'Users' => 'UsersRoute.php',
+ 'Tags' => 'TagsRoute.php',
+ 'Roles' => 'RolesRoute.php',
+ 'Topics' => 'TopicsRoute.php',
+ 'Posts' => 'PostsRoute.php',
+ 'Comments' => 'CommentsRoute.php'
+];
 
-$namespace_array=[
-        'Users'=>'UsersRoute.php',
-        'Tags' =>'TagsRoute.php', 
-        'Roles' =>'RolesRoute.php',
-        'Topics' =>'TopicsRoute.php',
-        'Posts'=>'PostsRoute.php'
-    ];
+foreach ($namespace_array as $namespace => $path) {
 
-foreach ($namespace_array as $namespace =>$path){
-    
     $router->group(['namespace' => $namespace], function () use ($router, $path) {
-    
+
         require $path;
-        
-}); //end route group
-    
+    }); //end route group
 }
 
 

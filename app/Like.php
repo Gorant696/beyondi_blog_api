@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model {
     
+    protected $fillable = ['user_id', 'comment_id', 'like'];
+    public $timestamps = false;
+    
 
     public function comments(){
         

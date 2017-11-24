@@ -119,6 +119,8 @@ class AdminAuthMiddleware {
 
             return $next($request);
         }
+        
+        return response()->json(['message' => 'You are not allowed to access this method!']);
     }
 
 }

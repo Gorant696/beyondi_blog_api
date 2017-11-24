@@ -119,8 +119,11 @@ class UsersController extends BasicController {
             return response()->json(['message' => "Can't find!"]);
         }
         
-        $auth_user = JWTAuth::parseToken()->toUser();
-
+       /*
+        * OVO PREBACITI U /posts/id/details u custom akciju
+        * 
+        *  $auth_user = JWTAuth::parseToken()->toUser();
+       
         try {
             $post->visitors()->create([
                 'user_id' => $auth_user->id,
@@ -129,7 +132,7 @@ class UsersController extends BasicController {
         } catch (\Exception $e) {
 
             return response()->json(['Data' => $post]);
-        }
+        }*/
 
         return response()->json(['Data' => $post]);
     }

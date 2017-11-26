@@ -274,4 +274,23 @@ class PostsController extends BasicController {
         }
         return response()->json(['message' => "Comment updated successfully!"]);
     }
+    
+    
+    public function attach_tag($id, $post_id){
+        
+        if (!$model =$this->model->find($post_id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        try{
+            
+            $model->tags()->attach($id);
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+         return response()->json(['message' => "Tag added successfully!"]); 
+    }
 }

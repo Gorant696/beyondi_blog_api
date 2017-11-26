@@ -260,5 +260,94 @@ class UsersController extends BasicController {
         
         return response()->json(['data' => $data]);  
     }
+    
+    public function add_role_to_user($id, Request $request, Role $role){
+        
+        $this->validate($request, [
+            'role' => 'required'
+        ]);
+        
+        if (!$input_role = $role->where('role_key', $request->input('role'))->first()){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]);   
+        }
+        try {
+        $input_role->users()->attach($id);
+        } catch (\Exception $e) {
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        return response()->json(['message' => "Role added successfully!"]); 
+    }
+    
+    
+    public function remove_role_to_user($id, Request $request, Role $role){
+        
+        $this->validate($request, [
+            'role' => 'required'
+        ]);
+        
+        if (!$input_role = $role->where('role_key', $request->input('role'))->first()){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]);   
+        }
+        try {
+        $input_role->users()->detach($id);
+        } catch (\Exception $e) {
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        return response()->json(['message' => "Role removed successfully!"]); 
+    }
+    
+    public function get_draft_posts($user_id){
+        
+        $status = Status::where('status_key', 'draft')->first();
+        
+        if (!$model = $this->model->find($user_id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]);  
+        }
+        
+        $data = $model->posts()->where('status_id', $status->id)->get();
+        
+        return response()->json(['data' => $data]); 
+        
+    }
+    
+    public function get_unpublished_posts($user_id){
+        
+        $status = Status::where('status_key', 'unpublished')->first();
+        
+        if (!$model = $this->model->find($user_id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]);  
+        }
+        
+        $data = $model->posts()->where('status_id', $status->id)->get();
+        
+        return response()->json(['data' => $data]); 
+        
+    }
+    
+    
+    public function get_published_posts($user_id){
+        
+        $status = Status::where('status_key', 'published')->first();
+        
+        if (!$model = $this->model->find($user_id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]);  
+        }
+        
+        $data = $model->posts()->where('status_id', $status->id)->get();
+        
+        return response()->json(['data' => $data]); 
+        
+    }
+    
+    
 
 }

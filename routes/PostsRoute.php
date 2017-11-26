@@ -66,6 +66,11 @@ $router->group(['middleware' => ['auth', 'admin_auth']], function () use ($route
             'uses' => 'PostsController@update_comment'
     ]);
         
+        $router->post('/posts/{post_id}/attach_tag/{id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'PostsController@attach_tag'
+    ]);
+        
         
     
 

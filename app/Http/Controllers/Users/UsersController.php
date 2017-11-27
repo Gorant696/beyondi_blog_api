@@ -378,6 +378,51 @@ class UsersController extends BasicController {
     }
     
     
+    public function create_subscribe_to_user($user_id, $id, Request $request, Subscribe $subscribe){
+        
+       
+        if (!$model = $this->model->find($user_id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        try {
+        $subscribe->create([
+            'user_id'=>$user_id,
+            'subscribable_id'=>$id,
+            'subscribable_type'=>'App\User'
+        ]);
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        return response()->json(['message' => "You subscribed successfully"]); 
+    }
+    
+    
+    public function create_subscribe_to_post($user_id, $id, Request $request, Subscribe $subscribe){
+        
+       
+        if (!$model = $this->model->find($user_id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        try {
+        $subscribe->create([
+            'user_id'=>$user_id,
+            'subscribable_id'=>$id,
+            'subscribable_type'=>'App\Post'
+        ]);
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        return response()->json(['message' => "You subscribed successfully"]); 
+    }
+    
     
     
 

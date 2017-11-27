@@ -83,6 +83,16 @@ $router->group(['middleware' => ['auth', 'admin_auth']], function () use ($route
             'uses' => 'UsersController@get_unpublished_posts'
     ]);
         
+        $router->post('/users/{user_id}/subscribe_user/{id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'UsersController@create_subscribe_to_user'
+    ]);
+        
+        $router->post('/users/{user_id}/subscribe_post/{id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'UsersController@create_subscribe_to_post'
+    ]);
+        
         
         
     

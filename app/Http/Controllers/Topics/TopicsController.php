@@ -250,5 +250,30 @@ class TopicsController extends BasicController {
          return response()->json(['message' => 'Post removed successfully!' ]);
     }
     
+    
+    public function get_topic_posts($id){
+        
+        if(!$model = $this->model->find($id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        $data = $model->posts()->get();
+        
+        return response()->json(['data' => $data ]);
+    }
+    
+     public function get_subtopic_posts($id, Subtopic $subtopic){
+        
+        if(!$model = $subtopic->find($id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        $data = $model->posts()->get();
+        
+        return response()->json(['data' => $data ]);
+    }
+    
         
 }

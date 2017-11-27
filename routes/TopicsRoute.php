@@ -2,7 +2,9 @@
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
-  
+    $router->get('/topics/{id}/published_posts', 'TopicsController@get_topic_posts');
+    
+    $router->get('/subtopics/{id}/published_posts', 'TopicsController@get_subtopic_posts');
    
          
 }); //end route group (middleware auth)

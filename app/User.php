@@ -39,7 +39,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     
     public function comments(){
         
-        return $this->hasmany(Comment::class);
+        return $this->hasmanythrough(Comment::class, Post::class);
         
     }
     
@@ -66,6 +66,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         
         return $this->hasmany(Like::class);
         
+    }
+    
+    public function subscribes(){
+        
+        return $this->morphMany(Subscribe::class, 'subscribable');
     }
     
   

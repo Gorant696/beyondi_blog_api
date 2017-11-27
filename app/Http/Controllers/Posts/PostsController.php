@@ -8,6 +8,7 @@ use App\Comment;
 use App\Relatedpost;
 use App\Similarpost;
 use App\Visitor;
+use App\Status;
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -292,5 +293,51 @@ class PostsController extends BasicController {
         }
         
          return response()->json(['message' => "Tag added successfully!"]); 
+    }
+    
+    public function detach_tag($id, $post_id){
+        
+        if (!$model =$this->model->find($post_id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+        try{
+            
+            $model->tags()->detach($id);
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        
+         return response()->json(['message' => "Tag removed successfully!"]); 
+    }
+    
+    
+    public function get_tags($id){
+        
+        if (!$model = $this->model->find($id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+        }
+        $data = $model->tags()->get();
+
+        return response()->json(['message' => $data]); 
+       
+    }
+    
+    
+    public function get_subscribes($id){
+        
+        $status = Status::where('status_key', 'published')->first();
+        
+        if (!$model = $this->model->where('id', $id)->where('status_id', $status->id)->first()){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]);  
+        }
+        
+       $subscribes = $model->subscribes()->with('users')->get()->pluck('users');
+
+        return response()->json(['data' => $subscribes]); 
     }
 }

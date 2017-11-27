@@ -17,6 +17,10 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
    $router->get('/posts/{id}/similarposts/{similarpost_id}', 'PostsController@get_similarpost');
    
    $router->post('/posts/{id}/comments', 'PostsController@create_comment');
+   
+   $router->get('/posts/{id}/get_tags', 'PostsController@get_tags');
+   
+   $router->get('/posts/{id}/get_subscribes', 'PostsController@get_subscribes');
 
          
 }); //end route group (middleware auth)
@@ -69,6 +73,11 @@ $router->group(['middleware' => ['auth', 'admin_auth']], function () use ($route
         $router->post('/posts/{post_id}/attach_tag/{id}', [
             'roles' => ['admin', 'user'],
             'uses' => 'PostsController@attach_tag'
+    ]);
+        
+        $router->delete('/posts/{post_id}/remove_tag/{id}', [
+            'roles' => ['admin', 'user'],
+            'uses' => 'PostsController@detach_tag'
     ]);
         
         

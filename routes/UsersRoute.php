@@ -3,7 +3,9 @@
 $router->group(['middleware' => 'auth'], function () use ($router) {
     
       $router->get('/users', 'UsersController@all');  
-
+      
+      $router->get('/users/get_publisherss', 'UsersController@publishers');
+      
       $router->get('/users/{id}', 'UsersController@find');
     
       $router->post('/users/posts', 'UsersController@create_post');
@@ -15,6 +17,10 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
       $router->get('/users/{id}/roles', 'UsersController@get_roles');
       
       $router->get('/users/{id}/published_posts', 'UsersController@get_published_posts');
+      
+      $router->get('/users/{id}/subscribes', 'UsersController@get_subscribes');
+      
+      
              
 }); //end route group (middleware auth)
 

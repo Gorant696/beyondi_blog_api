@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Topics;
 use App\Http\Controllers\BasicController;
 use App\Topic;
 use App\Subtopic;
+use App\Post;
+use App\Status;
 
 use JWTAuth;
 use Illuminate\Http\Request;
@@ -107,7 +109,7 @@ class TopicsController extends BasicController {
         
         if (!$topic = Topic::find($id)){ //this->model
             
-             return response()->json(['Message' => "Can't find topic!"], 400); //malo slovo
+             return response()->json(['message' => "Can't find topic!"], 400); //malo slovo
         }
         
         try {
@@ -118,10 +120,10 @@ class TopicsController extends BasicController {
             ]);
         } catch (\Exception $e){
             
-             return response()->json(['Message' => "Invalid data!"], 400);
+             return response()->json(['message' => "Invalid data!"], 400);
         }
         
-        return response()->json(['Message' => "Subtopic created successfully!"]);
+        return response()->json(['message' => "Subtopic created successfully!"]);
     }
     
     
@@ -134,7 +136,7 @@ class TopicsController extends BasicController {
         
         if (!$subtopic=Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){
             
-            return response()->json(['Message' => "Can't find subtopic!"]);
+            return response()->json(['message' => "Can't find subtopic!"]);
         }
         
         try {
@@ -144,10 +146,10 @@ class TopicsController extends BasicController {
         ]);
         } catch (\Exception $e){
             
-            return response()->json(['Message' => "Invalid data!"]);
+            return response()->json(['message' => "Invalid data!"]);
         }
         
-        return response()->json(['Message' => "Subtopic updated successfully!"]);
+        return response()->json(['message' => "Subtopic updated successfully!"]);
     }
     
     
@@ -157,12 +159,95 @@ class TopicsController extends BasicController {
         
        if (!$find_subtopic= Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){
            
-           return response()->json(['Message' => "Can't find subtopic!"]);
+           return response()->json(['message' => "Can't find subtopic!"]);
        }
        
        return $subtopic->delete($find_subtopic->id);
         
         
+    }
+    
+    public function add_post_to_topic($id, $post_id, Post $post){
+        
+        
+        $status = Status::where('status_key', 'published')->first();
+       
+        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        try {
+            $data = $model->topics()->attach($id);
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+         return response()->json(['message' => 'Post added successfully!' ]);
+    }
+    
+    
+    public function remove_post_from_topic($id, $post_id, Post $post){
+        
+        
+        $status = Status::where('status_key', 'published')->first();
+       
+        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        try {
+            $data = $model->topics()->detach($id);
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+         return response()->json(['message' => 'Post removed successfully!' ]);
+    }
+    
+    
+    public function add_post_to_subtopic($id, $post_id, Post $post){
+        
+        
+        $status = Status::where('status_key', 'published')->first();
+       
+        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        try {
+            $data = $model->subtopics()->attach($id);
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+         return response()->json(['message' => 'Post added successfully!' ]);
+    }
+    
+    
+    public function remove_post_from_subtopic($id, $post_id, Post $post){
+        
+        
+        $status = Status::where('status_key', 'published')->first();
+       
+        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+        try {
+            $data = $model->subtopics()->detach($id);
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]);
+        }
+        
+         return response()->json(['message' => 'Post removed successfully!' ]);
     }
     
         

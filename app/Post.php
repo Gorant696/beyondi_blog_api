@@ -63,6 +63,11 @@ class Post extends Model {
         
     }
     
+    public function subscribes(){
+        
+        return $this->morphMany(Subscribe::class, 'subscribable');
+    }
+    
   
     
     

@@ -8,6 +8,7 @@ use \App\Role;
 use \App\Post;
 use \App\Status;
 use \App\Visitor;
+use \App\Subscribe;
 use JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -346,6 +347,34 @@ class UsersController extends BasicController {
         
         return response()->json(['data' => $data]); 
         
+    }
+    
+    public function publishers(Post $post){
+        
+        $status = Status::where('status_key', 'published')->first();
+        
+     $models=$post->where('status_id', $status->id)->with('users')->get();
+     
+     $data=[];
+     
+     foreach ($models as $model){
+      
+         $data[$model->title]=[$model->users];
+     }
+   
+        return response()->json($data); 
+    }
+    
+    public function get_subscribes($id){
+        
+        if (!$model = $this->model->find($id)){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"]);  
+        }
+        
+       $subscribes = $model->subscribes()->with('users')->get()->pluck('users');
+
+        return response()->json(['data' => $subscribes]); 
     }
     
     

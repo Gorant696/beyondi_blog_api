@@ -18,21 +18,20 @@ class TagsController extends BasicController {
      
     }
     
-    public function create(Tag $tag, Request $request){
+    public function create(Request $request){
         
        $this->validate($request, [
             'tag_name' => 'required|max:20',
         ]);
        
        try {
-            $tag->name = $request->input('tag_name');
-            $tag->save();
+            $this->model->create($request->all());
             
             return response()->json(['message'=> 'Tag added!']);
             
        } catch (\Exception $e){
            
-           return response()->json(['message'=>'Tag already exists!']);
+           return response()->json(['message'=>'Tag already exists!'], 400);
        }
 
         
@@ -40,13 +39,13 @@ class TagsController extends BasicController {
     
     public function get_posts($id){
         
-        if(!$tag_posts = Tag::with('posts')->where('id', $id)->first()){
+        if(!$tag_posts = $this->model->with('posts')->where('id', $id)->first()){
             
-            return response()->json(['message'=>"Can't find tag"]);
+            return response()->json(['message'=>"Can't find tag"], 404);
             
         }
         
-        return response()->json(['data' => $tag_posts]);
+        return response()->json([$tag_posts]);
         
     }
     

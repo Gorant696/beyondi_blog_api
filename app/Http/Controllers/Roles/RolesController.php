@@ -16,15 +16,15 @@ class RolesController extends BasicController {
 
     public function get_users($id) {
 
-        if (!$role = Role::with('users')->where('id', $id)->first()) {
+        if (!$role = $this->model->with('users')->where('id', $id)->first()) {
 
-            return response()->json(['message' => "Can't find role!"]);
+            return response()->json(['message' => "Can't find role!"], 404);
         }
 
-        return response()->json(['data' => $role]);
+        return response()->json([$role]);
     }
 
-    public function create(Request $request, Role $role) {
+    public function create(Request $request) {
 
         $this->validate($request, [
             'role_name' => 'required|max:20',
@@ -32,12 +32,10 @@ class RolesController extends BasicController {
         ]);
 
         try {
-            $role->name = $request->input('role_name');
-            $role->role_key = $request->input('role_key');
-            $role->save();
+            $this->model->create($request->all());
         } catch (\Exception $e) {
 
-            return response()->json(['message' => $e->getMessage()]);
+            return response()->json(['message' => $e->getMessage()], 400);
         }
 
         return response()->json(['message' => 'Role added successfully!']);
@@ -50,13 +48,12 @@ class RolesController extends BasicController {
         ]);
 
         try {
-            $role = Role::find($id);
-            $role->name = $request->input('role_name');
-            $role->save();
+            $role = $this->model->find($id);
+            $role->update($request->all());
             
         } catch (\Exception $e) {
 
-            return respnonse()->json(['message' => $e->getMessage()]);
+            return respnonse()->json(['message' => $e->getMessage()], 400);
         }
         
         return response()->json(['message'=>'Updated successfully!']);

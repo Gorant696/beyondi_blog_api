@@ -31,7 +31,7 @@ class PostsController extends BasicController {
         
         if(!$model = $this->model->find($id)){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
             
         }
         
@@ -45,23 +45,23 @@ class PostsController extends BasicController {
         
         if (!$model=$this->model->find($id)){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
         
         $data= $model->comments()->get();
         
-        return response()->json(['message' => $data]);
+        return response()->json([$data]);
         
     }
     
     public function get_comment($id, $comment_id){
         
-        if (!$data=Comment::where('id', $comment_id)->where('post_id', $id)->first()){
+        if (!$data=$this->model->where('id', $comment_id)->where('post_id', $id)->first()){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
         
-         return response()->json(['message' => $data]);
+         return response()->json([$data]);
         
     }
     
@@ -69,12 +69,12 @@ class PostsController extends BasicController {
         
         if (!$model = $this->model->find($id)){
             
-           return response()->json(['message' => "Can't find!"]); 
+           return response()->json(['message' => "Can't find!"], 404); 
         }
         
         $data = $model->relatedposts()->get();
         
-        return response()->json(['message' => $data]);
+        return response()->json([$data]);
     }
     
      public function get_relatedpost($id, $relatedpost_id){
@@ -82,17 +82,17 @@ class PostsController extends BasicController {
 
         if (!$model = $this->model->find($id)){
             
-            return response()->json(['message' => "Can't find!"]); 
+            return response()->json(['message' => "Can't find!"], 404); 
         }
         
         
         if (!$data= $model->relatedposts()->where('relatedpost_id', $relatedpost_id)->first()){
             
-            return response()->json(['message' => "Can't find!"]); 
+            return response()->json(['message' => "Can't find!"], 404); 
         }
  
         
-        return response()->json(['message' => $data]);
+        return response()->json([$data]);
     }
     
     
@@ -100,12 +100,12 @@ class PostsController extends BasicController {
         
         if (!$model = $this->model->find($id)){
             
-           return response()->json(['message' => "Can't find!"]); 
+           return response()->json(['message' => "Can't find!"], 404); 
         }
         
         $data = $model->similarposts()->get();
         
-        return response()->json(['message' => $data]);
+        return response()->json([$data]);
     }
     
     
@@ -113,15 +113,15 @@ class PostsController extends BasicController {
         
         if (!$model = $this->model->find($id)){
             
-            return response()->json(['message' => "Can't find!"]); 
+            return response()->json(['message' => "Can't find!"], 404); 
         }
         
         if (!$data= $model->similarposts()->where('similarpost_id', $similarpost_id)->first()){
             
-            return response()->json(['message' => "Can't find!"]); 
+            return response()->json(['message' => "Can't find!"], 404); 
         }
  
-        return response()->json(['message' => $data]);
+        return response()->json([$data]);
     }
     
     
@@ -145,7 +145,7 @@ class PostsController extends BasicController {
         
         if (!$comment_find = $this->model->where('post_id', $id)->where('id', $comment_id)->first()){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
             
         }
         
@@ -160,7 +160,7 @@ class PostsController extends BasicController {
         
         if (!$relatedpost_find = $this->model->where('post_id', $post_id)->where('id', $id)->first()){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
         
         return $this->delete($relatedpost_find->id);
@@ -173,7 +173,7 @@ class PostsController extends BasicController {
         
         if (!$similarpost_find = $this->model->where('post_id', $post_id)->where('id', $id)->first()){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
         
         return $this->delete($similarpost_find->id);
@@ -188,7 +188,7 @@ class PostsController extends BasicController {
         
         if (!$post = $this->model->find($id)){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         $auth_user = JWTAuth::parseToken()->toUser();
@@ -201,7 +201,7 @@ class PostsController extends BasicController {
         ]);
         } catch (\Exception $e){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         
         return response()->json(['message' => "Comment created successfully!"]);
@@ -216,7 +216,7 @@ class PostsController extends BasicController {
         
          if (!$post = $this->model->find($post_id)){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         try {
@@ -226,7 +226,7 @@ class PostsController extends BasicController {
         ]);
         } catch (\Exception $e){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         return response()->json(['message' => "You successfully added related post!"]);
     }
@@ -240,7 +240,7 @@ class PostsController extends BasicController {
         
          if (!$post = $this->model->find($post_id)){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         try {
@@ -250,7 +250,7 @@ class PostsController extends BasicController {
         ]);
         } catch (\Exception $e){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         return response()->json(['message' => "You successfully added related post!"]);
     }
@@ -264,14 +264,14 @@ class PostsController extends BasicController {
         
         if (!$model = $comment->where('id', $comment_id)->where('post_id', $id)->first()){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         try {
             $model->update($request->all());
         } catch (\Exception $e){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         return response()->json(['message' => "Comment updated successfully!"]);
     }
@@ -281,15 +281,14 @@ class PostsController extends BasicController {
         
         if (!$model =$this->model->find($post_id)){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
         }
         
-        try{
-            
+        try {
             $model->tags()->attach($id);
         } catch (\Exception $e){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]); 
+             return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
         }
         
          return response()->json(['message' => "Tag added successfully!"]); 
@@ -299,15 +298,14 @@ class PostsController extends BasicController {
         
         if (!$model =$this->model->find($post_id)){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
         }
         
-        try{
-            
+        try {
             $model->tags()->detach($id);
         } catch (\Exception $e){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]); 
+             return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
         }
         
          return response()->json(['message' => "Tag removed successfully!"]); 
@@ -318,7 +316,7 @@ class PostsController extends BasicController {
         
         if (!$model = $this->model->find($id)){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
         }
         $data = $model->tags()->get();
 
@@ -333,7 +331,7 @@ class PostsController extends BasicController {
         
         if (!$model = $this->model->where('id', $id)->where('status_id', $status->id)->first()){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]);  
+             return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
         }
         
        $subscribes = $model->subscribes()->with('users')->get()->pluck('users');

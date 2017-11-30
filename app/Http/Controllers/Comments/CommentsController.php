@@ -27,12 +27,12 @@ class CommentsController extends BasicController {
         
        if (!$model = $this->model->find($id)){
            
-           return response()->json(['message' => "Something went wrong. Please try again!"]);
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);
        }
        
        $likes = $model->likes()->with('users')->get();
        
-       return response()->json(['message' => $likes]);
+       return response()->json([$likes]);
         
     }
     
@@ -40,7 +40,7 @@ class CommentsController extends BasicController {
         
         if (!$comment = $this->model->find($id)){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         $auth_user = JWTAuth::parseToken()->toUser();
@@ -53,7 +53,7 @@ class CommentsController extends BasicController {
         ]);
         } catch (\Exception $e){
             
-            return response()->json(['data' => 'You already liked this comment!']);
+            return response()->json(['data' => 'You already liked this comment!'], 400);
         }
         
         return response()->json(['data' => 'You like this comment!']);
@@ -64,9 +64,9 @@ class CommentsController extends BasicController {
         
         $this->model = $like;
         
-        if (!$like_find = Like::where('comment_id', $id)->where('id', $like_id)->first()){
+        if (!$like_find = $like->where('comment_id', $id)->where('id', $like_id)->first()){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
         
          return $this->delete($like_find->id);

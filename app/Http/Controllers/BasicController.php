@@ -134,6 +134,9 @@ class BasicController extends Controller {
         
             case 'tags':
                 $data = $model->tags()->get(); break;
+            
+            case 'roles':
+                $data = $model->roles()->get(); break;
         }
         
         return response()->json(['message' => $data]); 
@@ -220,5 +223,9 @@ class BasicController extends Controller {
         
          return response()->json(['message' => "Done!"]); 
     }
+    
+
+    
+    
 
 }

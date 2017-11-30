@@ -162,8 +162,7 @@ class UsersController extends BasicController {
         
         if (!$status = Status::where('status_key', $request->input('status'))->first()){
             
-            return response()->json(['message'=>'Wrong status chosen!'], 400);
-            
+            return response()->json(['message'=>'Wrong status chosen!'], 400); 
         }
         
         if (!$post = Post::where('user_id', $id)->where('id', $post_id)->first()){
@@ -180,11 +179,9 @@ class UsersController extends BasicController {
         } catch (Exception $e){
             
             return response()->json(['message' => 'Invalid data'], 400);
-            
         }
         
         return response()->json(['message'=>'Post updated successfully!']);
-
     }
     
     
@@ -202,43 +199,19 @@ class UsersController extends BasicController {
     }
     
     
-    public function get_visits($id){
+    public function get_visits($id, $function ='visitors'){
         
-        if (!$this->model->find($id)){
-            
-            return response()->json(['message' => "Can't find!"], 404);  
-        }
-        
-        $user_visits = Visitor::where('user_id', $id)->with('posts')->get();
-
-        return response()->json([$user_visits]);
+        $this->get_post_subresources($id, $function);
     }
     
-    
-    public function get_comments($id){
+    public function get_comments($id, $function ='comments'){
         
-        if(!$user= $this->model->find($id)){
-            
-             return response()->json(['message' => "Can't find!"], 404);  
-        }
-        
-        $data = $user->comments()->get();
-
-        return response()->json([$data]);
-  
+        $this->get_post_subresources($id, $function);
     }
     
-    public function get_roles($id){
+    public function get_roles($id, $function ='roles'){
         
-        if (!$user = $this->model->find($id)){
-            
-            return response()->json(['message' => "Can't find!"], 404);  
-            
-        }
-        
-       $data= $user->roles()->get();
-        
-        return response()->json([$data]);  
+        $this->get_post_subresources($id, $function);
     }
     
     public function add_role_to_user($id, Request $request, Role $role){
@@ -382,7 +355,6 @@ class UsersController extends BasicController {
     
     public function create_subscribe_to_post($user_id, $id, Request $request, Subscribe $subscribe){
         
-       
         if (!$model = $this->model->find($user_id)){
             
             return response()->json(['message' => "Something went wrong. Please try again!"], 404); 

@@ -44,6 +44,28 @@ class TopicsController extends BasicController {
         
     }
     
+     public function create_subtopic($id, Request $request){ 
+        
+        $this->validate($request, [
+            'name' => 'required|max:50',
+            'subtopic_key' => 'required|max:50',
+        ]);
+        
+        if (!$topic = $this->model->find($id)){ 
+            
+             return response()->json(['message' => "Can't find topic!"], 404); 
+        }
+        
+        try {
+            $topic -> subtopics()->create($request->all());
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Invalid data!"], 400);
+        }
+        
+        return response()->json(['message' => "Subtopic created successfully!"]);
+    }
+    
     public function update($id, Request $request){
         
         $this->validate($request, [
@@ -92,27 +114,7 @@ class TopicsController extends BasicController {
     }
     
     
-    public function create_subtopic($id, Request $request){ 
-        
-        $this->validate($request, [
-            'name' => 'required|max:50',
-            'subtopic_key' => 'required|max:50',
-        ]);
-        
-        if (!$topic = $this->model->find($id)){ 
-            
-             return response()->json(['message' => "Can't find topic!"], 404); 
-        }
-        
-        try {
-            $topic -> subtopics()->create($request->all());
-        } catch (\Exception $e){
-            
-             return response()->json(['message' => "Invalid data!"], 400);
-        }
-        
-        return response()->json(['message' => "Subtopic created successfully!"]);
-    }
+   
     
     
     public function update_subtopic($id, $subtopic_id, Request $request){
@@ -148,117 +150,41 @@ class TopicsController extends BasicController {
        }
        
        return $subtopic->delete($find_subtopic->id);
-        
-        
+
     }
     
-    public function add_post_to_topic($id, $post_id, Post $post){
+    public function add_post_to_topic($id, $post_id, Post $post, $function='attachtopic'){
         
+        return $this->attach_post_to_category($id, $post_id, $post, $function);
+    }
+    
+    public function remove_post_to_topic($id, $post_id, Post $post, $function='detachtopic'){
         
-        $status = Status::where('status_key', 'published')->first();
+        return $this->attach_post_to_category($id, $post_id, $post, $function);
+    }
+    
+    public function add_post_to_subtopic($id, $post_id, Post $post, $function='attachsubtopic'){
+        
+        return $this->attach_post_to_category($id, $post_id, $post, $function);
+    }
        
-        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
-        }
+    public function remove_post_to_subtopic($id, $post_id, Post $post, $function='detachsubtopic'){
         
-        try {
-            $data = $model->topics()->attach($id);
-        } catch (\Exception $e){
-            
-             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
-        }
-        
-         return response()->json(['message' => 'Post added successfully!' ]);
+        return $this->attach_post_to_category($id, $post_id, $post, $function);
     }
-    
-    
-    public function remove_post_from_topic($id, $post_id, Post $post){
-        
-        
-        $status = Status::where('status_key', 'published')->first();
-       
-        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
-        }
-        
-        try {
-            $data = $model->topics()->detach($id);
-        } catch (\Exception $e){
-            
-             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
-        }
-        
-         return response()->json(['message' => 'Post removed successfully!' ]);
-    }
-    
-    
-    public function add_post_to_subtopic($id, $post_id, Post $post){
-        
-        
-        $status = Status::where('status_key', 'published')->first();
-       
-        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
-        }
-        
-        try {
-            $data = $model->subtopics()->attach($id);
-        } catch (\Exception $e){
-            
-             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
-        }
-        
-         return response()->json(['message' => 'Post added successfully!' ]);
-    }
-    
-    
-    public function remove_post_from_subtopic($id, $post_id, Post $post){
-        
-        
-        $status = Status::where('status_key', 'published')->first();
-       
-        if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
-        }
-        
-        try {
-            $data = $model->subtopics()->detach($id);
-        } catch (\Exception $e){
-            
-             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
-        }
-        
-         return response()->json(['message' => 'Post removed successfully!' ]);
-    }
-    
     
     public function get_topic_posts($id){
         
-        if(!$model = $this->model->find($id)){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
-        }
+        return $this->get_category_posts($id);
+    }
+
+    public function get_subtopic_posts($id, Subtopic $subtopic){
         
-        $data = $model->posts()->get();
-        
-        return response()->json([ $data ]);
+        $this->model = $subtopic;
+        return $this->get_category_posts($id);
     }
     
-     public function get_subtopic_posts($id, Subtopic $subtopic){
-        
-        if(!$model = $subtopic->find($id)){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
-        }
-        
-        $data = $model->posts()->get();
-        
-        return response()->json(['data' => $data ]);
-    }
+
     
         
 }

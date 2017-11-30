@@ -96,7 +96,7 @@ class BasicController extends Controller {
              return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         
-         return response()->json(['message' => 'Post added successfully!' ]);
+         return response()->json(['message' => 'Done!' ]);
     }
     
     public function get_category_posts($id){
@@ -161,6 +161,64 @@ class BasicController extends Controller {
         }
 
         return response()->json([$data]);
+    }
+    
+    public function create_related_similar($post_id, $request, $validation_column){
+        
+        $this->validate($request, [
+            $validation_column => 'required'
+        ]);
+        
+         if (!$post = $this->model->find($post_id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
+        }
+        
+        try {
+            
+            if ($validation_column == 'relatedpost_id'){
+                $post->relatedposts()->create([
+                    'post_id'=>$post_id,
+                    'relatedpost_id'=>$request->input('relatedpost_id')
+                ]);
+            }
+            
+            if ($validation_column == 'similarpost_id'){
+                $post->similarposts()->create([
+                    'post_id'=>$post_id,
+                    'similarpost_id'=>$request->input('similarpost_id')
+                ]);
+            }
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400);
+        }
+        return response()->json(['message' => "Done!"]);
+        
+    }
+    
+    public function tag_control($id, $post_id, $function){
+        
+          if (!$model =$this->model->find($post_id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
+        }
+        
+        try {
+            
+            if ($function == 'attach'){
+                $model->tags()->attach($id);
+            }
+            
+            if ($function == 'detach'){
+                $model->tags()->detach($id);
+            }
+        } catch (\Exception $e){
+            
+             return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
+        }
+        
+         return response()->json(['message' => "Done!"]); 
     }
 
 }

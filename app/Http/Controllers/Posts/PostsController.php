@@ -100,7 +100,6 @@ class PostsController extends BasicController {
         
     }
     
-    
      public function delete_relatedpost($id, $post_id, Relatedpost $relatedpost){
         
          $this->model = $relatedpost;
@@ -155,54 +154,16 @@ class PostsController extends BasicController {
         
     }
     
-    public function create_relatedpost($post_id, Request $request){
+    public function create_relatedpost($post_id, Request $request, $validation_column='relatedpost_id'){
         
-        $this->validate($request, [
-            'relatedpost_id'=> 'required'
-        ]);
-        
-         if (!$post = $this->model->find($post_id)){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
-        }
-        
-        try {
-        $post->relatedposts()->create([
-            'post_id'=>$post_id,
-            'relatedpost_id'=>$request->input('relatedpost_id')
-        ]);
-        } catch (\Exception $e){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 400);
-        }
-        return response()->json(['message' => "You successfully added related post!"]);
+        return $this->create_related_similar($post_id, $request, $validation_column);
     }
     
-    
-    public function create_similarpost($post_id, Request $request){
+    public function create_similarpost($post_id, Request $request, $validation_column='similarpost_id'){
         
-        $this->validate($request, [
-            'similarpost_id'=> 'required'
-        ]);
-        
-         if (!$post = $this->model->find($post_id)){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
-        }
-        
-        try {
-        $post->similarposts()->create([
-            'post_id'=>$post_id,
-            'similarpost_id'=>$request->input('similarpost_id')
-        ]);
-        } catch (\Exception $e){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 400);
-        }
-        return response()->json(['message' => "You successfully added related post!"]);
+        return $this->create_related_similar($post_id, $request, $validation_column);
     }
-    
-    
+        
     public function update_comment($id, $comment_id, Request $request, Comment $comment){
         
         $this->validate($request, [
@@ -224,44 +185,16 @@ class PostsController extends BasicController {
     }
     
     
-    public function attach_tag($id, $post_id){
+    public function attach_tag($id, $post_id, $function ='attach'){
         
-        if (!$model =$this->model->find($post_id)){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
-        }
-        
-        try {
-            $model->tags()->attach($id);
-        } catch (\Exception $e){
-            
-             return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
-        }
-        
-         return response()->json(['message' => "Tag added successfully!"]); 
+        return $this->tag_control($id, $post_id, $function);
     }
     
-    public function detach_tag($id, $post_id){
+    public function detach_tag($id, $post_id, $function ='detach'){
         
-        if (!$model =$this->model->find($post_id)){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
-        }
-        
-        try {
-            $model->tags()->detach($id);
-        } catch (\Exception $e){
-            
-             return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
-        }
-        
-         return response()->json(['message' => "Tag removed successfully!"]); 
+        return $this->tag_control($id, $post_id, $function);
     }
-    
-    
-    
-    
-    
+
     public function get_subscribes($id){
         
         $status = Status::where('status_key', 'published')->first();

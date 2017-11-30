@@ -10,11 +10,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
    
    $router->get('/posts/{id}/relatedposts', 'PostsController@get_relatedposts');
    
-   $router->get('/posts/{id}/relatedposts/{relatedpost_id}', 'PostsController@get_relatedpost');
+   $router->get('/posts/{id}/relatedposts/{post_id}', 'PostsController@get_relatedpost');
    
    $router->get('/posts/{id}/similarposts', 'PostsController@get_similarposts');
    
-   $router->get('/posts/{id}/similarposts/{similarpost_id}', 'PostsController@get_similarpost');
+   $router->get('/posts/{id}/similarposts/{post_id}', 'PostsController@get_similarpost');
    
    $router->post('/posts/{id}/comments', 'PostsController@create_comment');
    

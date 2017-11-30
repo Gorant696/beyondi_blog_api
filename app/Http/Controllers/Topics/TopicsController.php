@@ -40,8 +40,7 @@ class TopicsController extends BasicController {
          }
          
          return response()->json(['message' => 'New topic created successfully!']);
-        
-        
+
     }
     
      public function create_subtopic($id, Request $request){ 
@@ -113,10 +112,7 @@ class TopicsController extends BasicController {
         return response()->json([$subtopic]);
     }
     
-    
-   
-    
-    
+
     public function update_subtopic($id, $subtopic_id, Request $request){
         
         $this->validate($request, [

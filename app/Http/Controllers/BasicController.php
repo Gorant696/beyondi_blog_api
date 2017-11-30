@@ -39,7 +39,7 @@ class BasicController extends Controller {
 
         if (!$data = $this->model::find($id)) {
 
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
 
         return response()->json(['data' => $data]);
@@ -50,7 +50,7 @@ class BasicController extends Controller {
 
         if (!$this->model::find($id)) {
 
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
 
         try {
@@ -59,7 +59,7 @@ class BasicController extends Controller {
             return response()->json(['message' => "Deleted!"]);
         } catch (\Exception $e) {
 
-            return response()->json(['message' => "Can't delete!"]);
+            return response()->json(['message' => "Can't delete!"], 400);
         }
     }
     
@@ -108,6 +108,58 @@ class BasicController extends Controller {
         
         $data = $model->posts()->get();
         
+        return response()->json([$data]);
+    }
+    
+    public function get_post_subresources($id, $function){
+        
+        if (!$model = $this->model->find($id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
+        }
+        
+        switch ($function){
+            
+            case 'visitors':
+                $data = $model->visitors()->get(); break;
+        
+            case 'comments':
+                $data = $model->comments()->get(); break;
+        
+            case 'relatedpsots':
+                $data = $model->relatedposts()->get(); break;
+        
+            case 'similarposts':
+                $data = $model->similarposts()->get(); break;
+        
+            case 'tags':
+                $data = $model->tags()->get(); break;
+        }
+        
+        return response()->json(['message' => $data]); 
+    }
+    
+    public function related_similar_posts($id, $post_id, $function){
+        
+         if (!$model = $this->model->find($id)){
+            
+            return response()->json(['message' => "Can't find!"], 404); 
+        }
+        
+        if ($function == 'relatedpost'){
+            if (!$data= $model->relatedposts()->where('relatedpost_id', $post_id)->first()){
+
+                return response()->json(['message' => "Can't find!"], 404); 
+            }
+        }
+        
+         if ($function == 'similarpost'){
+            if (!$data= $model->similarposts()->where('similarpost_id', $post_id)->first()){
+
+                return response()->json(['message' => "Can't find!"], 404); 
+            }
+        }
+
         return response()->json([$data]);
     }
 

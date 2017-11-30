@@ -14,19 +14,7 @@ use Tymon\JWTAuth\Exceptions\JWTException as JWTExc;
 
 class MyController extends Controller {
     
-    
-    
-    /*
-     * 
-     * Za editatiranje i brisanje kometara, lajkova, postova(tagova/statusa), 
-     * related i similar postova, i management svog accounta
-     * 
-     * U konstruktoru izvuč ID od autentificiranog usera i strpat ga
-     *  kao protected property za upotrebu u metodama kontrolera
-     * 
-     */
 
-  
     public function __construct() {
 
      

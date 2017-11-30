@@ -26,34 +26,31 @@ class PostsController extends BasicController {
      
     }
     
-    public function get_visitors($id){
+    public function get_visitors($id, $function = 'visitors'){
         
-        
-        if(!$model = $this->model->find($id)){
-            
-            return response()->json(['message' => "Can't find!"], 404);
-            
-        }
-        
-        $data= $model->visitors()->get();
-        
-        return response()->json(['message' => $data]);
-        
+        return $this->get_post_subresources($id, $function);
     }
     
-    public function get_comments($id){
+     public function get_comments($id, $function = 'comments'){
         
-        if (!$model=$this->model->find($id)){
-            
-            return response()->json(['message' => "Can't find!"], 404);
-        }
-        
-        $data= $model->comments()->get();
-        
-        return response()->json([$data]);
-        
+        return $this->get_post_subresources($id, $function);
     }
     
+    public function get_relatedposts($id, $function = 'relatedposts'){
+        
+        return $this->get_post_subresources($id, $function);
+    }
+    
+    public function get_similarposts($id, $function = 'similarposts'){
+        
+        return $this->get_post_subresources($id, $function);
+    }
+    
+    public function get_tags($id, $function = 'tags'){
+        
+        return $this->get_post_subresources($id, $function);
+    }
+
     public function get_comment($id, $comment_id){
         
         if (!$data=$this->model->where('id', $comment_id)->where('post_id', $id)->first()){
@@ -64,67 +61,17 @@ class PostsController extends BasicController {
          return response()->json([$data]);
         
     }
-    
-    public function get_relatedposts($id){
-        
-        if (!$model = $this->model->find($id)){
-            
-           return response()->json(['message' => "Can't find!"], 404); 
-        }
-        
-        $data = $model->relatedposts()->get();
-        
-        return response()->json([$data]);
-    }
-    
-     public function get_relatedpost($id, $relatedpost_id){
-        
 
-        if (!$model = $this->model->find($id)){
-            
-            return response()->json(['message' => "Can't find!"], 404); 
-        }
-        
-        
-        if (!$data= $model->relatedposts()->where('relatedpost_id', $relatedpost_id)->first()){
-            
-            return response()->json(['message' => "Can't find!"], 404); 
-        }
- 
-        
-        return response()->json([$data]);
-    }
-    
-    
-    public function get_similarposts($id){
-        
-        if (!$model = $this->model->find($id)){
-            
-           return response()->json(['message' => "Can't find!"], 404); 
-        }
-        
-        $data = $model->similarposts()->get();
-        
-        return response()->json([$data]);
-    }
-    
-    
-    public function get_similarpost($id, $similarpost_id){
-        
-        if (!$model = $this->model->find($id)){
-            
-            return response()->json(['message' => "Can't find!"], 404); 
-        }
-        
-        if (!$data= $model->similarposts()->where('similarpost_id', $similarpost_id)->first()){
-            
-            return response()->json(['message' => "Can't find!"], 404); 
-        }
- 
-        return response()->json([$data]);
-    }
-    
-    
+    public function get_relatedpost($id, $post_id, $function = 'relatedpost'){
+         
+         return $this->related_similar_posts($id, $post_id, $function);
+     }
+     
+    public function get_similarpost($id, $post_id, $function = 'similarpost'){
+         
+         return $this->related_similar_posts($id, $post_id, $function);
+     }
+
     public function delete_visitors($post_id, Visitor $visitor){
         
         $find = $visitor->where('post_id', $post_id)->get();
@@ -312,17 +259,7 @@ class PostsController extends BasicController {
     }
     
     
-    public function get_tags($id){
-        
-        if (!$model = $this->model->find($id)){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
-        }
-        $data = $model->tags()->get();
-
-        return response()->json(['message' => $data]); 
-       
-    }
+    
     
     
     public function get_subscribes($id){

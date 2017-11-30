@@ -28,22 +28,17 @@ class UsersController extends BasicController {
     
     static protected function slug($text) {
         
-        // replace non letter or digits by -
+        
         $text = preg_replace('~[^\pL\d]+~u', '-', $text);
 
-        // transliterate
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
-        // remove unwanted characters
         $text = preg_replace('~[^-\w]+~', '', $text);
 
-        // trim
         $text = trim($text, '-');
 
-        // remove duplicate -
         $text = preg_replace('~-+~', '-', $text);
 
-        // lowercase
         $text = strtolower($text);
 
         return $text;
@@ -80,10 +75,10 @@ class UsersController extends BasicController {
         ]);
 
         try {
-            $user = User::find($user_id);
+            $user = $this->model->find($user_id);
 
             if (!$user) {
-                return response()->json(['message' => 'User with this ID does not exist!']);
+                return response()->json(['message' => 'User with this ID does not exist!', 404]);
             }
 
             $pass = $request->input('password');
@@ -106,10 +101,10 @@ class UsersController extends BasicController {
 
         if (!$posts = Post::where('user_id', $user_id)->get()) {
 
-            return response()->json(['message' => "User doesn't exist!"]);
+            return response()->json(['message' => "User doesn't exist!"], 404);
         }
 
-        return response()->json(['Data' => $posts]);
+        return response()->json([ $posts]);
     }
 
     
@@ -117,25 +112,10 @@ class UsersController extends BasicController {
 
         if (!$post = Post::where('id', $post_id)->where('user_id', $id)->first()) {
 
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
         }
         
-       /*
-        * OVO PREBACITI U /posts/id/details u custom akciju
-        * 
-        *  $auth_user = JWTAuth::parseToken()->toUser();
-       
-        try {
-            $post->visitors()->create([
-                'user_id' => $auth_user->id,
-                'ip_adress' => $_SERVER["REMOTE_ADDR"]]);
-            
-        } catch (\Exception $e) {
-
-            return response()->json(['Data' => $post]);
-        }*/
-
-        return response()->json(['Data' => $post]);
+        return response()->json([$post]);
     }
     
     
@@ -149,7 +129,7 @@ class UsersController extends BasicController {
         
         if (!$status = Status::where('status_key', $request->input('status'))->first()){
             
-            return response()->json(['message'=>'Wrong status chosen!']);
+            return response()->json(['message'=>'Wrong status chosen!'], 400);
         }
         
         $slug = self::slug($request->input('title'));
@@ -165,7 +145,7 @@ class UsersController extends BasicController {
             
         } catch (\Exception $e){
             
-            return response()->json(['message' => 'Invalid data']);
+            return response()->json(['message' => 'Invalid data'], 400);
         }
         
         return response()->json(['message'=>'Post created successfully!']);
@@ -182,13 +162,13 @@ class UsersController extends BasicController {
         
         if (!$status = Status::where('status_key', $request->input('status'))->first()){
             
-            return response()->json(['message'=>'Wrong status chosen!']);
+            return response()->json(['message'=>'Wrong status chosen!'], 400);
             
         }
         
         if (!$post = Post::where('user_id', $id)->where('id', $post_id)->first()){
             
-            return response()->json(['message' => "Can't find post"]);
+            return response()->json(['message' => "Can't find post"], 404);
         }
         
         try {
@@ -199,7 +179,7 @@ class UsersController extends BasicController {
             
         } catch (Exception $e){
             
-            return response()->json(['message' => 'Invalid data']);
+            return response()->json(['message' => 'Invalid data'], 400);
             
         }
         
@@ -212,9 +192,9 @@ class UsersController extends BasicController {
         
         $this->model = $post;
         
-        if (!$post_find = Post::where('user_id', $id)->where('id', $post_id)->first()){
+        if (!$post_find = $post->where('user_id', $id)->where('id', $post_id)->first()){
             
-            return response()->json(['message' => "Can't find!"]);
+            return response()->json(['message' => "Can't find!"], 404);
             
         }
         
@@ -224,42 +204,41 @@ class UsersController extends BasicController {
     
     public function get_visits($id){
         
-        if (!User::find($id)){
+        if (!$this->model->find($id)){
             
-            return response()->json(['message' => "Can't find!"]);
-            
+            return response()->json(['message' => "Can't find!"], 404);  
         }
         
         $user_visits = Visitor::where('user_id', $id)->with('posts')->get();
 
-        return response()->json(['data' => $user_visits]);
+        return response()->json([$user_visits]);
     }
     
     
     public function get_comments($id){
         
-        if(!$user=User::find($id)){
+        if(!$user= $this->model->find($id)){
             
-             return response()->json(['message' => "Can't find!"]);  
+             return response()->json(['message' => "Can't find!"], 404);  
         }
         
         $data = $user->comments()->get();
 
-        return response()->json(['data' => $data]);
+        return response()->json([$data]);
   
     }
     
     public function get_roles($id){
         
-        if (!$user = User::find($id)){
+        if (!$user = $this->model->find($id)){
             
-            return response()->json(['message' => "Can't find!"]);  
+            return response()->json(['message' => "Can't find!"], 404);  
             
         }
         
        $data= $user->roles()->get();
         
-        return response()->json(['data' => $data]);  
+        return response()->json([$data]);  
     }
     
     public function add_role_to_user($id, Request $request, Role $role){
@@ -270,13 +249,13 @@ class UsersController extends BasicController {
         
         if (!$input_role = $role->where('role_key', $request->input('role'))->first()){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]);   
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);   
         }
         try {
         $input_role->users()->attach($id);
         } catch (\Exception $e) {
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
         }
         
         return response()->json(['message' => "Role added successfully!"]); 
@@ -291,13 +270,13 @@ class UsersController extends BasicController {
         
         if (!$input_role = $role->where('role_key', $request->input('role'))->first()){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]);   
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);   
         }
         try {
         $input_role->users()->detach($id);
         } catch (\Exception $e) {
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
         }
         
         return response()->json(['message' => "Role removed successfully!"]); 
@@ -309,7 +288,7 @@ class UsersController extends BasicController {
         
         if (!$model = $this->model->find($user_id)){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]);  
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
         }
         
         $data = $model->posts()->where('status_id', $status->id)->get();
@@ -324,12 +303,12 @@ class UsersController extends BasicController {
         
         if (!$model = $this->model->find($user_id)){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]);  
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
         }
         
         $data = $model->posts()->where('status_id', $status->id)->get();
         
-        return response()->json(['data' => $data]); 
+        return response()->json([$data]); 
         
     }
     
@@ -340,7 +319,7 @@ class UsersController extends BasicController {
         
         if (!$model = $this->model->find($user_id)){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]);  
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
         }
         
         $data = $model->posts()->where('status_id', $status->id)->get();
@@ -369,7 +348,7 @@ class UsersController extends BasicController {
         
         if (!$model = $this->model->find($id)){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]);  
+             return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
         }
         
        $subscribes = $model->subscribes()->with('users')->get()->pluck('users');
@@ -383,7 +362,7 @@ class UsersController extends BasicController {
        
         if (!$model = $this->model->find($user_id)){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
         }
         
         try {
@@ -394,7 +373,7 @@ class UsersController extends BasicController {
         ]);
         } catch (\Exception $e){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
         }
         
         return response()->json(['message' => "You subscribed successfully"]); 
@@ -406,7 +385,7 @@ class UsersController extends BasicController {
        
         if (!$model = $this->model->find($user_id)){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
         }
         
         try {
@@ -417,12 +396,43 @@ class UsersController extends BasicController {
         ]);
         } catch (\Exception $e){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]); 
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
         }
         
         return response()->json(['message' => "You subscribed successfully"]); 
     }
     
+    
+    public function published_post($id, $post_id, Post $post){
+        
+        if (!$status = Status::where('status_key', 'published')->first()){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
+        }
+        
+        if (!$model = $post->where('id', $post_id)->where('user_id', $id)->where('status_id', $status->id)->first()){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
+        }
+        
+        $auth_user = JWTAuth::parseToken()->toUser();
+       
+        try {
+            $model->visitors()->create([
+                'user_id' => $auth_user->id,
+                'ip_adress' => $_SERVER["REMOTE_ADDR"],
+                'post_id' => $post_id
+                    ]);
+            
+        } catch (\Exception $e) {
+      
+            return response()->json([$model]);
+        }
+        
+        return response()->json([$model]);
+       
+        
+    }
     
     
 

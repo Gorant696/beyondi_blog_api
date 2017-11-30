@@ -25,7 +25,7 @@ class TopicsController extends BasicController {
      
     }
     
-    public function create(Topic $topic, Request $request){
+    public function create(Request $request){
         
          $this->validate($request, [
             'name' => 'required|max:50',
@@ -33,11 +33,7 @@ class TopicsController extends BasicController {
         ]);
          
          try {
-             //$this->model->create($request->all());
-         $topic->name = $request->input('name');
-         $topic->topic_key = $request->input('topic_key');
-         $topic->save();
-         
+            $this->model->create($request->all());
          } catch(\Exception $e){
              
              return response()->json(['message' => 'Invalid data!'], 400);
@@ -55,17 +51,13 @@ class TopicsController extends BasicController {
             'topic_key' => 'required|max:50',
         ]);
         
-        if(!$topic = Topic::find($id)){ //$this->model->find()
+        if(!$topic = $this->model->find($id)){ //
             
             return response()->json(['message' => "Can't find topic!"], 404);
         }
         
         try {
-            //$this->model->update($request->all());
-            $topic->name = $request->input('name');
-            $topic->topic_key = $request->input('topic_key');
-            $topic->save();
-        
+            $topic->update($request->all());
         } catch (\Exception $e){
             
             return response()->json(['message' => 'Invalid data!'], 400);
@@ -75,49 +67,45 @@ class TopicsController extends BasicController {
     }
     
     
-    public function get_subtopics($id){ //getSubTopics()
+    public function get_subtopics($id){ 
         
-        if (!$subtopics=Topic::find($id)){ //$this->model
+        if (!$subtopics= $this->model->find($id)){ 
             
-            return response()->json(['message' => "Can't find!"], 400);
+            return response()->json(['message' => "Can't find!"], 404);
         }
         
         $data= $subtopics->subtopics()->get();
         
-        return response()->json(['message' => $data]);
+        return response()->json([$data]);
     }
     
     
     
-    public function get_subtopic($id, $subtopic_id /*Subtopic $subtopicModel*/){ //getSubTopic
+    public function get_subtopic($id, $subtopic_id, Subtopic $subtopic_model){ 
         
-        if(!$subtopic = Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){ //$subtopicModel->where
+        if(!$subtopic = $subtopic_model->where('id', $subtopic_id)->where('topic_id', $id)->first()){
             
-            return response()->json(['message' => "Can't find subtopic!"], 400);
+            return response()->json(['message' => "Can't find subtopic!"], 404);
         }
         
-        return response()->json(['message' => $subtopic]);
+        return response()->json([$subtopic]);
     }
     
     
-    public function create_subtopic($id, Request $request){ //ime funkcije
+    public function create_subtopic($id, Request $request){ 
         
         $this->validate($request, [
             'name' => 'required|max:50',
             'subtopic_key' => 'required|max:50',
         ]);
         
-        if (!$topic = Topic::find($id)){ //this->model
+        if (!$topic = $this->model->find($id)){ 
             
-             return response()->json(['message' => "Can't find topic!"], 400); //malo slovo
+             return response()->json(['message' => "Can't find topic!"], 404); 
         }
         
         try {
-            $topic -> subtopics()->create(//$request->all()
-            [ 
-                'name'=> $request->input('name'),
-                'subtopic_key'=> $request->input('subtopic_key')
-            ]);
+            $topic -> subtopics()->create($request->all());
         } catch (\Exception $e){
             
              return response()->json(['message' => "Invalid data!"], 400);
@@ -136,17 +124,14 @@ class TopicsController extends BasicController {
         
         if (!$subtopic=Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){
             
-            return response()->json(['message' => "Can't find subtopic!"]);
+            return response()->json(['message' => "Can't find subtopic!"], 404);
         }
         
         try {
-        $subtopic->update([
-            'name'=>$request->input('name'),
-            'subtopic_key'=>$request->input('subtopic_key')
-        ]);
+        $subtopic->update($request->all());
         } catch (\Exception $e){
             
-            return response()->json(['message' => "Invalid data!"]);
+            return response()->json(['message' => "Invalid data!"], 400);
         }
         
         return response()->json(['message' => "Subtopic updated successfully!"]);
@@ -159,7 +144,7 @@ class TopicsController extends BasicController {
         
        if (!$find_subtopic= Subtopic::where('id', $subtopic_id)->where('topic_id', $id)->first()){
            
-           return response()->json(['message' => "Can't find subtopic!"]);
+           return response()->json(['message' => "Can't find subtopic!"], 404);
        }
        
        return $subtopic->delete($find_subtopic->id);
@@ -174,14 +159,14 @@ class TopicsController extends BasicController {
        
         if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         try {
             $data = $model->topics()->attach($id);
         } catch (\Exception $e){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]);
+             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         
          return response()->json(['message' => 'Post added successfully!' ]);
@@ -195,14 +180,14 @@ class TopicsController extends BasicController {
        
         if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         try {
             $data = $model->topics()->detach($id);
         } catch (\Exception $e){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]);
+             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         
          return response()->json(['message' => 'Post removed successfully!' ]);
@@ -216,14 +201,14 @@ class TopicsController extends BasicController {
        
         if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         try {
             $data = $model->subtopics()->attach($id);
         } catch (\Exception $e){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]);
+             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         
          return response()->json(['message' => 'Post added successfully!' ]);
@@ -237,14 +222,14 @@ class TopicsController extends BasicController {
        
         if (!$model = $post->where('id', $post_id)->where('status_id', $status->id)->first()){
             
-            return response()->json(['message' => "Something went wrong. Please try again!"]);
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404);
         }
         
         try {
             $data = $model->subtopics()->detach($id);
         } catch (\Exception $e){
             
-             return response()->json(['message' => "Something went wrong. Please try again!"]);
+             return response()->json(['message' => "Something went wrong. Please try again!"], 400);
         }
         
          return response()->json(['message' => 'Post removed successfully!' ]);
@@ -255,19 +240,19 @@ class TopicsController extends BasicController {
         
         if(!$model = $this->model->find($id)){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
         }
         
         $data = $model->posts()->get();
         
-        return response()->json(['data' => $data ]);
+        return response()->json([ $data ]);
     }
     
      public function get_subtopic_posts($id, Subtopic $subtopic){
         
         if(!$model = $subtopic->find($id)){
             
-           return response()->json(['message' => "Something went wrong. Please try again!"]); 
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
         }
         
         $data = $model->posts()->get();

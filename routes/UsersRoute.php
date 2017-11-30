@@ -20,6 +20,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
       
       $router->get('/users/{id}/subscribes', 'UsersController@get_subscribes');
       
+      $router->get('/users/{id}/posts/{post_id}/published', 'UsersController@published_post');
+      
       
              
 }); //end route group (middleware auth)

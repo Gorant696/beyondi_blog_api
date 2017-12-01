@@ -32,8 +32,8 @@ $router->get('/logout', 'MyController@logoutuser');
 
 $router->get('/auth', 'FacebookController@login');
 
-$router->get('auth/facebook/callback', 'FacebookController@callback');
-
+$router->get('/callback', 'FacebookController@callback');
+//proba
 
 
 

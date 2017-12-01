@@ -6,7 +6,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-use App\Socialaccount;
+use App\User;
+
 
 
 class FacebookController extends Controller {
@@ -19,7 +20,7 @@ class FacebookController extends Controller {
      
     }
     
-    public function callback(Request $request, Socialaccount $social){
+    public function callback(Request $request, User $social_user){
         
    
         if (isset($_GET['code'])){
@@ -43,7 +44,7 @@ class FacebookController extends Controller {
             
            try {
                 
-                $social->create([
+                $social_user->create([
                     'name'=>$name,
                         'email' => $email,
                             'fb_id' => $fb_id

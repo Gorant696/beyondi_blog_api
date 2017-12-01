@@ -30,10 +30,10 @@ $router->get('/logout', 'MyController@logoutuser');
 
 //Fb login
 
-$router->get('/auth', 'FacebookController@login');
+$router->get('/fbauth', 'FacebookController@login');
 
 $router->get('/callback', 'FacebookController@callback');
-//proba
+
 
 
 

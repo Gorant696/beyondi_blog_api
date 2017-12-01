@@ -28,6 +28,14 @@ $router->get('/logout', 'MyController@logoutuser');
 
 
 
+//Fb login
+
+$router->get('/auth', 'FacebookController@login');
+
+$router->get('auth/facebook/callback', 'FacebookController@callback');
+
+
+
 
 
 

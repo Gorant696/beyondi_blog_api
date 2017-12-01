@@ -224,6 +224,71 @@ class BasicController extends Controller {
          return response()->json(['message' => "Done!"]); 
     }
     
+    public function role_control($id, $request, $role, $function){
+        
+        $this->validate($request, [
+            'role' => 'required'
+        ]);
+        
+        if (!$input_role = $role->where('role_key', $request->input('role'))->first()){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);   
+        }
+        try {
+            if ($function == 'attach'){
+                
+                $input_role->users()->attach($id);
+            }
+            
+            if ($function == 'detach'){
+                
+                $input_role->users()->detach($id);
+            }
+        
+        } catch (\Exception $e) {
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
+        }
+        
+        return response()->json(['message' => "Done!"]); 
+    }
+    
+    public function get_status_posts($user_id, $function){
+        
+        $status = Status::where('status_key', $function)->first();
+        
+        if (!$model = $this->model->find($user_id)){
+            
+           return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
+        }
+        
+        $data = $model->posts()->where('status_id', $status->id)->get();
+        
+        return response()->json([$data]); 
+        
+    }
+    
+    public function create_subscribe($user_id, $id, $request,$subscribe, $function){
+        
+        if (!$model = $this->model->find($user_id)){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
+        }
+        
+        try {
+        $subscribe->create([
+            'user_id'=>$user_id,
+            'subscribable_id'=>$id,
+            'subscribable_type'=>$function
+        ]);
+        } catch (\Exception $e){
+            
+            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
+        }
+        
+        return response()->json(['message' => "You subscribed successfully"]); 
+    }
+    
 
     
     

@@ -214,92 +214,32 @@ class UsersController extends BasicController {
         $this->get_post_subresources($id, $function);
     }
     
-    public function add_role_to_user($id, Request $request, Role $role){
+    public function add_role_to_user($id, Request $request, Role $role, $function = 'attach'){
         
-        $this->validate($request, [
-            'role' => 'required'
-        ]);
-        
-        if (!$input_role = $role->where('role_key', $request->input('role'))->first()){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404);   
-        }
-        try {
-        $input_role->users()->attach($id);
-        } catch (\Exception $e) {
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
-        }
-        
-        return response()->json(['message' => "Role added successfully!"]); 
+        return $this->role_control($id, $request, $role, $function);
     }
     
+    public function remove_role_to_user($id, Request $request, Role $role, $function = 'detach'){
+        
+        return $this->role_control($id, $request, $role, $function);
+    }
+        
     
-    public function remove_role_to_user($id, Request $request, Role $role){
+    public function get_draft_posts($user_id, $function='draft'){
         
-        $this->validate($request, [
-            'role' => 'required'
-        ]);
-        
-        if (!$input_role = $role->where('role_key', $request->input('role'))->first()){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404);   
-        }
-        try {
-        $input_role->users()->detach($id);
-        } catch (\Exception $e) {
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
-        }
-        
-        return response()->json(['message' => "Role removed successfully!"]); 
+        return $this->get_status_posts($user_id, $function);
     }
     
-    public function get_draft_posts($user_id){
+     public function get_unpublished_posts($user_id, $function='unpublished'){
         
-        $status = Status::where('status_key', 'draft')->first();
-        
-        if (!$model = $this->model->find($user_id)){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
-        }
-        
-        $data = $model->posts()->where('status_id', $status->id)->get();
-        
-        return response()->json(['data' => $data]); 
-        
+        return $this->get_status_posts($user_id, $function);
     }
     
-    public function get_unpublished_posts($user_id){
+     public function get_published_posts($user_id, $function='published'){
         
-        $status = Status::where('status_key', 'unpublished')->first();
-        
-        if (!$model = $this->model->find($user_id)){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
-        }
-        
-        $data = $model->posts()->where('status_id', $status->id)->get();
-        
-        return response()->json([$data]); 
-        
+        return $this->get_status_posts($user_id, $function);
     }
-    
-    
-    public function get_published_posts($user_id){
         
-        $status = Status::where('status_key', 'published')->first();
-        
-        if (!$model = $this->model->find($user_id)){
-            
-           return response()->json(['message' => "Something went wrong. Please try again!"], 404);  
-        }
-        
-        $data = $model->posts()->where('status_id', $status->id)->get();
-        
-        return response()->json(['data' => $data]); 
-        
-    }
     
     public function publishers(Post $post){
         
@@ -329,52 +269,16 @@ class UsersController extends BasicController {
         return response()->json(['data' => $subscribes]); 
     }
     
-    
-    public function create_subscribe_to_user($user_id, $id, Request $request, Subscribe $subscribe){
+    public function create_subscribe_to_user($user_id, $id, Request $request, Subscribe $subscribe, $function = 'App\User'){
         
-       
-        if (!$model = $this->model->find($user_id)){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
-        }
-        
-        try {
-        $subscribe->create([
-            'user_id'=>$user_id,
-            'subscribable_id'=>$id,
-            'subscribable_type'=>'App\User'
-        ]);
-        } catch (\Exception $e){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
-        }
-        
-        return response()->json(['message' => "You subscribed successfully"]); 
+       return $this->create_subscribe($user_id, $id, $request, $subscribe, $function);
     }
     
-    
-    public function create_subscribe_to_post($user_id, $id, Request $request, Subscribe $subscribe){
+     public function create_subscribe_to_post($user_id, $id, Request $request, Subscribe $subscribe, $function = 'App\Post'){
         
-        if (!$model = $this->model->find($user_id)){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 404); 
-        }
-        
-        try {
-        $subscribe->create([
-            'user_id'=>$user_id,
-            'subscribable_id'=>$id,
-            'subscribable_type'=>'App\Post'
-        ]);
-        } catch (\Exception $e){
-            
-            return response()->json(['message' => "Something went wrong. Please try again!"], 400); 
-        }
-        
-        return response()->json(['message' => "You subscribed successfully"]); 
+       return $this->create_subscribe($user_id, $id, $request, $subscribe, $function);
     }
-    
-    
+
     public function published_post($id, $post_id, Post $post){
         
         if (!$status = Status::where('status_key', 'published')->first()){
